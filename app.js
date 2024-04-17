@@ -1,20 +1,25 @@
-// Імпортуємо express
-const express = require('express');
-// Створюємо екземпляр додатку
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+
+dotenv.config();
 const app = express();
 
-// Встановлюємо базовий маршрут та обробник для нього
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.use(cors());
+app.use(express.json());
 
-// Обробник маршруту /about
-app.get('/about', (req, res) => {
-    res.send('About page');
-});
-
-// Встановлюємо порт, на якому буде слухати сервер
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+async function main() {
+  try {
+    await mongoose.connect(process.env.DB_URL);
+    console.log("Database connection successful");
+    app.listen(PORT, () => {
+      console.log(`Server is running. Use our API on port: ${PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+main();
