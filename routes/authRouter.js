@@ -10,4 +10,6 @@ authRouter.get('/verify/:verificationToken', authController.verify);
 authRouter.post('/verify', authController.resendEmail);
 authRouter.post('/verifyLogin', authController.verifyLogin);
 
+authRouter.delete('/delete', authController.deleteUser);
+
 export default authRouter;
