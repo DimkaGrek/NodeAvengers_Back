@@ -1,6 +1,9 @@
 import bcrypt from 'bcrypt';
 import gravatar from 'gravatar';
 import { nanoid } from 'nanoid';
+import queryString from 'query-string';
+import axios from 'axios';
+import { response } from 'express';
 
 import HttpError from '../helpers/HttpError.js';
 import authServices from '../services/authServices.js';
@@ -18,6 +21,7 @@ const singup = async (req, res, next) => {
         if (user) {
             throw HttpError(409, 'Email in use');
         }
+
         const hashPassword = await bcrypt.hash(password, 10);
         const avatarURL = gravatar.url(email);
 
@@ -35,7 +39,7 @@ const singup = async (req, res, next) => {
             avatarURL,
             verificationToken,
         });
-        res.status(201).json({ email, name: newUser.name, avatarURL });
+        res.status(201).json({ email });
     } catch (error) {
         next(error);
     }
@@ -44,8 +48,10 @@ const singup = async (req, res, next) => {
 const verify = async (req, res, next) => {
     try {
         let { verificationToken } = req.params;
+        console.log('verifyToken: ', verificationToken);
         const user = await User.findOne({ verificationToken });
         if (!user) {
+            console.log('if no token');
             return res.redirect(`${process.env.URL_SUCCESS}/2`);
         }
         await User.findByIdAndUpdate(user._id, {
@@ -56,6 +62,11 @@ const verify = async (req, res, next) => {
         verificationToken = nanoid();
         user.verificationToken = verificationToken;
         await user.save();
+
+        console.log(
+            'url-redirect: ',
+            `${process.env.URL_SUCCESS}/1?token=${verificationToken}`
+        );
 
         res.redirect(`${process.env.URL_SUCCESS}/1?token=${verificationToken}`);
     } catch (error) {
@@ -108,6 +119,18 @@ const signin = async (req, res, next) => {
         if (!comparePassword) {
             throw HttpError(401, 'Email or password wrong');
         }
+        const userDto = new UserDto(user);
+
+        const tokens = TokenService.generateTokens({ ...userDto });
+
+        user.accessToken = tokens.accessToken;
+        user.refreshToken = tokens.refreshToken;
+        await user.save();
+        res.cookie('refreshToken', user.refreshToken, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+        });
+        return res.json({ ...tokens, user: userDto });
     } catch (error) {
         next(error);
     }
@@ -135,27 +158,140 @@ const verifyLogin = async (req, res, next) => {
         user.accessToken = tokens.accessToken;
         user.refreshToken = tokens.refreshToken;
         await user.save();
+        res.cookie('refreshToken', user.refreshToken, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+        });
         return res.json({ ...tokens, user: userDto });
     } catch (error) {
         next(error);
     }
 };
 
-const deleteUser = async (req, res, next) => {
-    const { email } = req.body;
-    const user = await authServices.findUser({ email });
-    if (!user) {
-        throw HttpError(404, 'No user found');
+const googleAuth = async (req, res, next) => {
+    try {
+        console.log('client_id: ', process.env.GOOGLE_CLIENT_ID);
+        const stringifiedParams = queryString.stringify({
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            redirect_uri: `${process.env.API_URL}${process.env.API_PREFIX}/auth/google-redirect`,
+            scope: [
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/userinfo.profile',
+            ].join(' '),
+            response_type: 'code',
+            access_type: 'offline',
+            prompt: 'consent',
+        });
+        return res.redirect(
+            `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
+        );
+    } catch (error) {
+        next(error);
     }
-    await User.deleteOne({ email });
+};
 
-    res.json({ message: 'user deleted successfully' });
+const googleRedirect = async (req, res, next) => {
+    try {
+        const { code } = req.query;
+
+        const tokenData = await axios({
+            url: 'https://oauth2.googleapis.com/token',
+            method: 'post',
+            data: {
+                client_id: process.env.GOOGLE_CLIENT_ID,
+                client_secret: process.env.GOOGLE_CLIENT_SECRET,
+                redirect_uri: `${process.env.API_URL}${process.env.API_PREFIX}/auth/google-redirect`,
+                grant_type: 'authorization_code',
+                code,
+            },
+        });
+        const userData = await axios({
+            url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${tokenData.data.access_token}`,
+            },
+        });
+        console.log(userData.data);
+
+        const { email, name, picture } = userData.data;
+        let user = await authServices.findUser({ email });
+        if (!user) {
+            const newUser = await User.create({
+                email,
+                password: nanoid(),
+                name,
+                avatarURL: picture,
+                verify: true,
+                verificationToken: tokenData.data.access_token,
+            });
+            user = newUser;
+        } else {
+            user.verificationToken = tokenData.data.access_token;
+            await user.save();
+        }
+
+        res.redirect(
+            `${process.env.URL_SUCCESS}/3?token=${user.verificationToken}`
+        );
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteUser = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        const user = await authServices.findUser({ email });
+        if (!user) {
+            throw HttpError(404, 'No user found');
+        }
+        await User.deleteOne({ email });
+
+        res.json({ message: 'user deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const refresh = async (req, res, next) => {
+    try {
+        const refreshToken = req.cookies.refreshToken;
+        console.log('refreshToken: ', refreshToken);
+        if (!refreshToken) {
+            throw HttpError(401, "No refresh token provided'");
+        }
+        const userData = TokenService.validateRefreshToken(refreshToken);
+        console.log('userData: ', userData);
+        const user = await authServices.findUser({ refreshToken });
+        if (!userData || !user.refreshToken) {
+            throw HttpError(401);
+        }
+        const userDto = new UserDto(user);
+
+        const tokens = TokenService.generateTokens({ ...userDto });
+
+        user.accessToken = tokens.accessToken;
+        user.refreshToken = tokens.refreshToken;
+        await user.save();
+        res.cookie('refreshToken', user.refreshToken, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+        });
+        return res.json({ ...tokens, user: userDto });
+    } catch (error) {
+        next(error);
+    }
 };
 
 export default {
     singup,
     verify,
     resendEmail,
+    signin,
     verifyLogin,
     deleteUser,
+    googleAuth,
+    googleRedirect,
+    refresh,
 };
