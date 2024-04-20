@@ -2,15 +2,15 @@ import { Schema, model } from "mongoose";
 
 const EmailSchema = new Schema(
   {
-    Title: {
+    title: {
       type: String,
       required: [true, "Title is required"],
     },
-    Description: {
+    description: {
       type: String,
       required: [true, "Description is required"],
     },
-    UserId: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },

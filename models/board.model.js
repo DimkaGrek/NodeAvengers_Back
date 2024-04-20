@@ -1,16 +1,17 @@
 import { Schema, model } from "mongoose";
 
 const BoardSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Name is required"],
+    {
+        name: {
+            type: String,
+            required: [true, "Name is required"],
+        },
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
+        columns: { type: Schema.Types.ObjectId, ref: "Colum" },
     },
-    UserId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  },
-  { versionKey: false }
+    { versionKey: false }
 );
 export const Board = model("Board", BoardSchema);
