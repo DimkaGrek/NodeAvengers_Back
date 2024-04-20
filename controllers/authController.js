@@ -117,13 +117,16 @@ const verifyLogin = async (req, res, next) => {
     try {
         const { token } = req.body;
 
+        console.log('token from verify page', token);
         const user = await User.findOne({ verificationToken: token });
 
         if (!user) {
+            console.log('if no user verify token....');
             throw HttpError(404, 'No user found');
         }
 
         user.verificationToken = '';
+        console.log('verifyToken delete...');
 
         const userDto = new UserDto(user);
 
