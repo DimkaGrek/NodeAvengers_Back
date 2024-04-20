@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { Theme } from '../models/theme.model.js';
 
 const UserSchema = new Schema(
     {
@@ -42,4 +43,11 @@ const UserSchema = new Schema(
     },
     { versionKey: false }
 );
+
+UserSchema.pre('save', async function (next) {
+    if (!this.themeId) {
+        const defaultTheme = await Theme.findOne().sort({ _id: 1 }).exec();
+        this.themeId = defaultTheme ? defaultTheme._id : null;
+    }
+});
 export const User = model('User', UserSchema);
