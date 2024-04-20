@@ -286,7 +286,12 @@ const refresh = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
     try {
+        console.log('cookies: ', req.cookies);
         const { refreshToken } = req.cookies;
+        if (!refreshToken) {
+            console.log('no refreshTokens in cookies');
+            throw HttpError(401, 'no refreshTokens in cookies');
+        }
         console.log('refreshToken for logout: ', refreshToken);
         const user = await authServices.findUser({ refreshToken });
 
