@@ -9,7 +9,6 @@ import {
 } from "../controllers/boardController.js";
 
 const boardRouter = express.Router();
-
 boardRouter.get("/", getBoards);
 boardRouter.get("/:id", getBoard);
 boardRouter.post("/", createBoard);
