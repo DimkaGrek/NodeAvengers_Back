@@ -25,6 +25,8 @@
     "nanoid": "^5.0.7",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
-    "query-string": "^9.0.0"
+    "query-string": "^9.0.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
   }
 }
