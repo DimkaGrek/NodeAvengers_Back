@@ -284,6 +284,27 @@ const refresh = async (req, res, next) => {
     }
 };
 
+const logout = async (req, res, next) => {
+    try {
+        const { refreshToken } = req.cookies;
+        console.log('refreshToken for logout: ', refreshToken);
+        const user = await authServices.findUser({ refreshToken });
+
+        if (!user) {
+            console.log('no user by refreshToken');
+            throw HttpError(401);
+        }
+        console.log('user find by refreshToken');
+        user.accessToken = '';
+        user.refreshToken = '';
+        await user.save();
+        res.clearCookie('refreshToken');
+        return res.status(200).json(refreshToken);
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     singup,
     verify,
@@ -294,4 +315,5 @@ export default {
     googleAuth,
     googleRedirect,
     refresh,
+    logout,
 };

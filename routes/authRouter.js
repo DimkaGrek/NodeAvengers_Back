@@ -10,6 +10,7 @@ authRouter.get('/verify/:verificationToken', authController.verify);
 authRouter.post('/verify', authController.resendEmail);
 authRouter.post('/verifyLogin', authController.verifyLogin);
 authRouter.get('/refresh', authController.refresh);
+authRouter.post('/logout', authController.logout);
 
 authRouter.get('/google', authController.googleAuth);
 authRouter.get('/google-redirect', authController.googleRedirect);
