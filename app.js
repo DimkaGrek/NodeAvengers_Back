@@ -4,9 +4,6 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
-
-import { Colum } from "./models/colum.model.js";
-
 import mainRouter from "./routes/index.js";
 
 dotenv.config();
@@ -31,10 +28,7 @@ const PORT = process.env.PORT || 3000;
 
 async function main() {
     try {
-        await mongoose.connect(process.env.DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(process.env.DB_URL);
         console.log("Database connection successful");
         app.listen(PORT, () => {
             console.log(`Server is running. Use our API on port: ${PORT}`);

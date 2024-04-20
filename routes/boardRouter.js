@@ -1,19 +1,19 @@
 import express from "express";
 
 import {
-    getBoardsController,
-    getBoardController,
-    createBoardController,
-    deleteBoardController,
-    updateBoardController,
+    getBoards,
+    getBoard,
+    createBoard,
+    deleteBoard,
+    updateBoard,
 } from "../controllers/boardController.js";
 
-const borderRouter = express.Router();
+const boardRouter = express.Router();
 
-borderRouter.get("/", getBoardsController);
-borderRouter.get("/:id", getBoardController);
-borderRouter.post("/", createBoardController);
-borderRouter.put("/:id", updateBoardController);
-borderRouter.delete("/:id", deleteBoardController);
+boardRouter.get("/", getBoards);
+boardRouter.get("/:id", getBoard);
+boardRouter.post("/", createBoard);
+boardRouter.put("/:id", updateBoard);
+boardRouter.delete("/:id", deleteBoard);
 
-export default borderRouter;
+export default boardRouter;

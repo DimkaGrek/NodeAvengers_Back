@@ -11,12 +11,13 @@ import { User } from '../models/user.model.js';
 import MailService from '../services/MailService.js';
 import UserDto from '../dto/UserDto.js';
 import TokenService from '../services/TokenService.js';
+import { find } from '../services/findOneService.js';
 
 const singup = async (req, res, next) => {
     try {
         const { email, password, name } = req.body;
 
-        const user = await authServices.findUser({ email });
+        const user = await find(User,{ email });
 
         if (user) {
             throw HttpError(409, 'Email in use');
@@ -101,7 +102,7 @@ const resendEmail = async (req, res, next) => {
 const signin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const user = await authServices.findUser({ email });
+        const user = await find(User, { email });
         if (!user) {
             throw HttpError(401, 'Email or password wrong');
         }
@@ -212,10 +213,9 @@ const googleRedirect = async (req, res, next) => {
                 Authorization: `Bearer ${tokenData.data.access_token}`,
             },
         });
-        console.log(userData.data);
 
         const { email, name, picture } = userData.data;
-        let user = await authServices.findUser({ email });
+        let user = await find(User,{ email });
         if (!user) {
             const newUser = await User.create({
                 email,
@@ -242,7 +242,7 @@ const googleRedirect = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
     try {
         const { email } = req.body;
-        const user = await authServices.findUser({ email });
+        const user = await find(User,{ email });
         if (!user) {
             throw HttpError(404, 'No user found');
         }
@@ -263,7 +263,7 @@ const refresh = async (req, res, next) => {
         }
         const userData = TokenService.validateRefreshToken(refreshToken);
         console.log('userData: ', userData);
-        const user = await authServices.findUser({ refreshToken });
+        const user = await find(User,{ refreshToken });
         if (!userData || !user.refreshToken) {
             throw HttpError(401);
         }
@@ -297,7 +297,7 @@ const logout = async (req, res, next) => {
             throw HttpError(401);
         }
         console.log('refreshToken for logout: ', refreshToken);
-        const user = await authServices.findUser({ refreshToken });
+        const user = await find(User,{ refreshToken });
 
         if (!user) {
             console.log('no user by refreshToken');

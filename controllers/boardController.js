@@ -1,8 +1,9 @@
 import { Board } from "../models/board.model.js";
 import HttpError from "../helpers/HttpError.js";
-import { findBoard } from "../services/BoardService.js";
+import { find } from "../services/findOneService.js";
+import { deleteColumnAndCards } from "../services/ColumnService.js";
 
-export const getBoardsController = async (req, res, next) => {
+export const getBoards = async (req, res, next) => {
     try {
         const { id } = req.user;
         const boards = await Board.find({ userId: id });
@@ -11,49 +12,48 @@ export const getBoardsController = async (req, res, next) => {
         next(error);
     }
 };
-export const getBoardController = async (req, res, next) => {
+export const getBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const board = await Board.findById({ _id: id });
-       
-        console.log( board.populated("columns"));
-        await board.populate("columns");
-        board.populated("columns");
-        console.log(board);
+        const board = await Board.findById(id).populate({
+            path: "columns",
+            populate: {
+                path: "cards",
+            },
+        });
         if (!board) throw HttpError(404, "Board not found");
-
         res.json(board);
     } catch (error) {
         next(error);
     }
 };
-export const createBoardController = async (req, res, next) => {
+export const createBoard = async (req, res, next) => {
     try {
         const { name } = req.body;
         const { id } = req.user;
-        const findName = await findBoard({ name });
-
+        const findName = await find(Board, { name });
         if (findName)
             throw HttpError(400, "Board with same name has already created");
-
         const board = await Board.create({ name, userId: id });
         res.json(board);
     } catch (error) {
         next(error);
     }
 };
-export const deleteBoardController = async (req, res, next) => {
+export const deleteBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const board = await Board.findByIdAndDelete(id);
+        const board = await Board.findByIdAndDelete(id).populate("columns");
         if (!board) throw HttpError(404, "Board not found");
-
+        board.columns.forEach(async (element) => {
+            await deleteColumnAndCards(element._id);
+        });
         res.json("Success");
     } catch (error) {
         next(error);
     }
 };
-export const updateBoardController = async (req, res, next) => {
+export const updateBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { name } = req.body;
@@ -63,7 +63,6 @@ export const updateBoardController = async (req, res, next) => {
             { new: true }
         );
         if (!board) throw HttpError(404, "Board not found");
-
         res.json(board);
     } catch (error) {
         next(error);

@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const ColumSchema = new Schema(
+const ColumnSchema = new Schema(
     {
         name: {
             type: String,
@@ -14,4 +14,4 @@ const ColumSchema = new Schema(
     },
     { versionKey: false }
 );
-export const Colum = model("Colum", ColumSchema);
+export const Column = model("Column", ColumnSchema);
