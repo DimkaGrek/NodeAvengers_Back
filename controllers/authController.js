@@ -14,7 +14,7 @@ import TokenService from '../services/TokenService.js';
 
 const singup = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, name } = req.body;
 
         const user = await authServices.findUser({ email });
 
@@ -35,7 +35,7 @@ const singup = async (req, res, next) => {
         const newUser = await User.create({
             email,
             password: hashPassword,
-            name: 'User',
+            name: name ? name : 'User',
             avatarURL,
             verificationToken,
         });
