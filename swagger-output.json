@@ -1,18 +1,20 @@
 {
-    "swagger": "2.0",
+    "openapi": "3.0.0",
     "info": {
-        "title": "My API",
-        "description": "Description",
+        "title": "NodeAvengers",
+        "description": "if you have some question write to Dima or Artem)",
         "version": "1.0.0"
     },
-    "host": "localhost:3000",
-    "basePath": "/api/",
-    "schemes": ["http"],
+    "servers": [
+        {
+            "url": "http://localhost:3000/api/"
+        }
+    ],
     "paths": {
         "/auth/register": {
             "post": {
                 "description": "Users",
-                "tags": ["User"],
+                "tags": ["Auth"],
                 "parameters": [
                     {
                         "name": "body",
@@ -35,11 +37,15 @@
                 ],
                 "responses": {
                     "201": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "example": "admin@gmail.com"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "email": {
+                                            "example": "admin@gmail.com"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -50,7 +56,7 @@
         "/auth/login": {
             "post": {
                 "description": "",
-                "tags": ["User"],
+                "tags": ["Auth"],
 
                 "parameters": [
                     {
@@ -71,37 +77,41 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "accessToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                },
-                                "refreshToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                },
-                                "user": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "id": {
-                                            "type": "string",
-                                            "example": "66226bed73c29e33133f0244"
+                                        "accessToken": {
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                         },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "zzombi200125@gmail.com"
+                                        "refreshToken": {
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "User"
-                                        },
-                                        "avatarURL": {
-                                            "type": "string",
-                                            "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
-                                        },
-                                        "themeId": {
-                                            "type": "null",
-                                            "example": null
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "66226bed73c29e33133f0244"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "zzombi200125@gmail.com"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "User"
+                                                },
+                                                "avatarURL": {
+                                                    "type": "string",
+                                                    "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
+                                                },
+                                                "themeId": {
+                                                    "type": "null",
+                                                    "example": null
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -114,7 +124,7 @@
         "/auth/verify/{verificationToken}": {
             "get": {
                 "description": "",
-                "tags": ["User"],
+                "tags": ["Auth"],
 
                 "parameters": [
                     {
@@ -134,7 +144,7 @@
         "/auth/verify": {
             "post": {
                 "description": "",
-                "tags": ["User"],
+                "tags": ["Auth"],
 
                 "parameters": [
                     {
@@ -152,11 +162,15 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "example": "Success"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "example": "Success"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -167,7 +181,7 @@
         "/auth/verifyLogin": {
             "post": {
                 "description": "",
-                "tags": ["User"],
+                "tags": ["Auth"],
 
                 "parameters": [
                     {
@@ -185,37 +199,41 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "accessToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                },
-                                "refreshToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                },
-                                "user": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "id": {
-                                            "type": "string",
-                                            "example": "66226bed73c29e33133f0244"
+                                        "accessToken": {
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                         },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "zzombi200125@gmail.com"
+                                        "refreshToken": {
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "User"
-                                        },
-                                        "avatarURL": {
-                                            "type": "string",
-                                            "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
-                                        },
-                                        "themeId": {
-                                            "type": "null",
-                                            "example": null
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "66226bed73c29e33133f0244"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "zzombi200125@gmail.com"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "User"
+                                                },
+                                                "avatarURL": {
+                                                    "type": "string",
+                                                    "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
+                                                },
+                                                "themeId": {
+                                                    "type": "null",
+                                                    "example": null
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -227,7 +245,7 @@
         },
         "/auth/refresh": {
             "get": {
-                "tags": ["User"],
+                "tags": ["Auth"],
                 "description": "",
                 "parameters": [
                     {
@@ -245,37 +263,41 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "accessToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                },
-                                "refreshToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                },
-                                "user": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "id": {
-                                            "type": "string",
-                                            "example": "66226bed73c29e33133f0244"
+                                        "accessToken": {
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                         },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "zzombi200125@gmail.com"
+                                        "refreshToken": {
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "User"
-                                        },
-                                        "avatarURL": {
-                                            "type": "string",
-                                            "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
-                                        },
-                                        "themeId": {
-                                            "type": "null",
-                                            "example": null
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "66226bed73c29e33133f0244"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "zzombi200125@gmail.com"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "User"
+                                                },
+                                                "avatarURL": {
+                                                    "type": "string",
+                                                    "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
+                                                },
+                                                "themeId": {
+                                                    "type": "null",
+                                                    "example": null
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -287,7 +309,7 @@
         },
         "/auth/logout": {
             "post": {
-                "tags": ["User"],
+                "tags": ["Auth"],
                 "description": "",
                 "parameters": [
                     {
@@ -305,11 +327,41 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "refreshToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "refreshToken": {
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/resendEmail": {
+            "post": {
+                "tags": ["Auth"],
+
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "example": "example@gmail.com"
+                                    }
                                 }
                             }
                         }
@@ -319,7 +371,7 @@
         },
         "/auth/google": {
             "get": {
-                "tags": ["User"],
+                "tags": ["Auth"],
 
                 "description": "",
                 "responses": {
@@ -331,7 +383,7 @@
         },
         "/auth/google-redirect": {
             "get": {
-                "tags": ["User"],
+                "tags": ["Auth"],
 
                 "description": "",
                 "parameters": [
@@ -344,6 +396,250 @@
                 "responses": {
                     "default": {
                         "description": ""
+                    }
+                }
+            }
+        },
+        "/auth/delete": {
+            "delete": {
+                "description": "",
+                "tags": ["Auth"],
+
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "example": "any"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "",
+                "tags": ["User"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "66226b9a73c29e33133f0240"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "zzombi200124@gmail.com"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "User"
+                                        },
+                                        "avatarURL": {
+                                            "type": "string",
+                                            "example": "//www.gravatar.com/avatar/c8d6f4ba6b5b119ce2a5220640d82b22"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "",
+                "tags": ["User"],
+
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userData": {
+                                        "example": "any"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/theme": {
+            "patch": {
+                "tags": ["User"],
+
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "themeId": {
+                                            "example": "66226bed73c29e33133f0244"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "themeId": {
+                                        "example": "66226bed73c29e33133f0244"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/themes/": {
+            "get": {
+                "description": "",
+                "tags": ["Theme"],
+
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "description": "",
+                "tags": ["Theme"],
+
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "example": "any"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/themes/{id}": {
+            "put": {
+                "description": "",
+                "tags": ["Theme"],
+
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "example": "any"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "",
+                "tags": ["Theme"],
+
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             }
@@ -361,32 +657,36 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "_id": {
-                                        "type": "string",
-                                        "example": "662433136df26838b508a9bd"
-                                    },
-                                    "name": {
-                                        "type": "string",
-                                        "example": "sec trye"
-                                    },
-                                    "userId": {
-                                        "type": "string",
-                                        "example": "66226bed73c29e33133f0244"
-                                    },
-                                    "columns": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string",
-                                            "example": [
-                                                "6624331d6df26838b508a9c3",
-                                                "6624331d6df26838b508a9c3",
-                                                "6624331d6df26838b508a9c3"
-                                            ]
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "example": "662433136df26838b508a9bd"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "sec trye"
+                                            },
+                                            "userId": {
+                                                "type": "string",
+                                                "example": "66226bed73c29e33133f0244"
+                                            },
+                                            "columns": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": [
+                                                        "6624331d6df26838b508a9c3",
+                                                        "6624331d6df26838b508a9c3",
+                                                        "6624331d6df26838b508a9c3"
+                                                    ]
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -423,24 +723,28 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string",
-                                    "example": "board1"
-                                },
-                                "userId": {
-                                    "type": "string",
-                                    "example": "66243605039254c689cd444b"
-                                },
-                                "columns": {
-                                    "type": "array",
-                                    "example": []
-                                },
-                                "_id": {
-                                    "type": "string",
-                                    "example": "66252b0840a640b903bd1abb"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "board1"
+                                        },
+                                        "userId": {
+                                            "type": "string",
+                                            "example": "66243605039254c689cd444b"
+                                        },
+                                        "columns": {
+                                            "type": "array",
+                                            "example": []
+                                        },
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "66252b0840a640b903bd1abb"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -471,71 +775,75 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "_id": {
-                                    "type": "string",
-                                    "example": "662433136df26838b508a9bd"
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "example": "sec trye"
-                                },
-                                "userId": {
-                                    "type": "string",
-                                    "example": "66226bed73c29e33133f0244"
-                                },
-                                "columns": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "_id": {
-                                                "type": "string",
-                                                "example": "6624331d6df26838b508a9c3"
-                                            },
-                                            "name": {
-                                                "type": "string",
-                                                "example": "12"
-                                            },
-                                            "boardId": {
-                                                "type": "string",
-                                                "example": "662433136df26838b508a9bd"
-                                            },
-                                            "cards": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "_id": {
-                                                            "type": "string",
-                                                            "example": "662433276df26838b508a9ca"
-                                                        },
-                                                        "title": {
-                                                            "type": "string",
-                                                            "example": "2"
-                                                        },
-                                                        "description": {
-                                                            "type": "string",
-                                                            "example": "hello?"
-                                                        },
-                                                        "priority": {
-                                                            "type": "string",
-                                                            "example": "high"
-                                                        },
-                                                        "deadline": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2024-04-17T14:00:00.000Z"
-                                                        },
-                                                        "columnId": {
-                                                            "type": "string",
-                                                            "example": "6624331d6df26838b508a9c3"
-                                                        },
-                                                        "__v": {
-                                                            "type": "integer",
-                                                            "example": 0
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "662433136df26838b508a9bd"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "sec trye"
+                                        },
+                                        "userId": {
+                                            "type": "string",
+                                            "example": "66226bed73c29e33133f0244"
+                                        },
+                                        "columns": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "6624331d6df26838b508a9c3"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "12"
+                                                    },
+                                                    "boardId": {
+                                                        "type": "string",
+                                                        "example": "662433136df26838b508a9bd"
+                                                    },
+                                                    "cards": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "_id": {
+                                                                    "type": "string",
+                                                                    "example": "662433276df26838b508a9ca"
+                                                                },
+                                                                "title": {
+                                                                    "type": "string",
+                                                                    "example": "2"
+                                                                },
+                                                                "description": {
+                                                                    "type": "string",
+                                                                    "example": "hello?"
+                                                                },
+                                                                "priority": {
+                                                                    "type": "string",
+                                                                    "example": "high"
+                                                                },
+                                                                "deadline": {
+                                                                    "type": "string",
+                                                                    "format": "date-time",
+                                                                    "example": "2024-04-17T14:00:00.000Z"
+                                                                },
+                                                                "columnId": {
+                                                                    "type": "string",
+                                                                    "example": "6624331d6df26838b508a9c3"
+                                                                },
+                                                                "__v": {
+                                                                    "type": "integer",
+                                                                    "example": 0
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -582,25 +890,29 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "_id": {
-                                    "type": "string",
-                                    "example": "662433136df26838b508a9bd"
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "example": "kaef"
-                                },
-                                "userId": {
-                                    "type": "string",
-                                    "example": "66226bed73c29e33133f0244"
-                                },
-                                "columns": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "662433136df26838b508a9bd"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "kaef"
+                                        },
+                                        "userId": {
+                                            "type": "string",
+                                            "example": "66226bed73c29e33133f0244"
+                                        },
+                                        "columns": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -667,24 +979,28 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string",
-                                    "example": "first"
-                                },
-                                "boardId": {
-                                    "type": "string",
-                                    "example": "66243605039254c689cd444b"
-                                },
-                                "cards": {
-                                    "type": "array",
-                                    "example": []
-                                },
-                                "_id": {
-                                    "type": "string",
-                                    "example": "662530a4058dbb5d245eebe2"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "first"
+                                        },
+                                        "boardId": {
+                                            "type": "string",
+                                            "example": "66243605039254c689cd444b"
+                                        },
+                                        "cards": {
+                                            "type": "array",
+                                            "example": []
+                                        },
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "662530a4058dbb5d245eebe2"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -727,24 +1043,28 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "_id": {
-                                    "type": "string",
-                                    "example": "662530a4058dbb5d245eebe2"
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "example": "test"
-                                },
-                                "boardId": {
-                                    "type": "string",
-                                    "example": "66243605039254c689cd444b"
-                                },
-                                "cards": {
-                                    "type": "array",
-                                    "example": []
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "662530a4058dbb5d245eebe2"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "boardId": {
+                                            "type": "string",
+                                            "example": "66243605039254c689cd444b"
+                                        },
+                                        "cards": {
+                                            "type": "array",
+                                            "example": []
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -883,37 +1203,41 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "_id": {
-                                    "type": "string",
-                                    "example": "66243476afcebfe970385231"
-                                },
-                                "title": {
-                                    "type": "string",
-                                    "example": "3"
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "example": "hello?"
-                                },
-                                "priority": {
-                                    "type": "string",
-                                    "example": "high"
-                                },
-                                "deadline": {
-                                    "type": "string",
-                                    "format": "date-time",
-                                    "example": "2024-04-17T14:00:00.000Z"
-                                },
-                                "columnId": {
-                                    "type": "string",
-                                    "example": "6624331d6df26838b508a9c3"
-                                },
-                                "__v": {
-                                    "type": "integer",
-                                    "example": 0
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "66243476afcebfe970385231"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "3"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "hello?"
+                                        },
+                                        "priority": {
+                                            "type": "string",
+                                            "example": "high"
+                                        },
+                                        "deadline": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-04-17T14:00:00.000Z"
+                                        },
+                                        "columnId": {
+                                            "type": "string",
+                                            "example": "6624331d6df26838b508a9c3"
+                                        },
+                                        "__v": {
+                                            "type": "integer",
+                                            "example": 0
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -994,33 +1318,37 @@
                 ],
                 "responses": {
                     "200": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "title": {
-                                    "type": "string",
-                                    "example": "hide"
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "example": "hie?"
-                                },
-                                "priority": {
-                                    "type": "string",
-                                    "example": "high"
-                                },
-                                "deadline": {
-                                    "type": "string",
-                                    "format": "date-time",
-                                    "example": "2024-04-17T14:00:00.000Z"
-                                },
-                                "columnId": {
-                                    "type": "string",
-                                    "example": "6624331d6df26838b508a9c3"
-                                },
-                                "_id": {
-                                    "type": "string",
-                                    "example": "66253ed2dcb8b0aab77a4f9f"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "example": "hide"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "hie?"
+                                        },
+                                        "priority": {
+                                            "type": "string",
+                                            "example": "high"
+                                        },
+                                        "deadline": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-04-17T14:00:00.000Z"
+                                        },
+                                        "columnId": {
+                                            "type": "string",
+                                            "example": "6624331d6df26838b508a9c3"
+                                        },
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "66253ed2dcb8b0aab77a4f9f"
+                                        }
+                                    }
                                 }
                             }
                         }
