@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authRouter from "./authRouter.js";
 import userRouter from "./userRouter.js";
+import themeRouter from "./themeRouter.js";
 import boardRouter from "./boardRouter.js";
 import columRouter from "./columnRouter.js";
 import cardRouter from "./cardRouter.js";
@@ -11,6 +12,8 @@ const mainRouter = Router();
 mainRouter.use("/auth", authRouter);
 
 mainRouter.use("/users", userRouter);
+
+mainRouter.use("/themes", themeRouter);
 
 mainRouter.use("/board", authMiddleware, boardRouter);
 
