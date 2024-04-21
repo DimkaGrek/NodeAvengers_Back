@@ -131,6 +131,7 @@ const signin = async (req, res, next) => {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             Secure: true,
+            // sameSite: "lax",
         });
         return res.json({ ...tokens, user: userDto });
     } catch (error) {
@@ -288,16 +289,16 @@ const refresh = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
     try {
-        // console.log('cookies: ', req.cookies);
-        // const { refreshToken } = req.cookies;
-        // if (!refreshToken) {
-        //     console.log('no refreshTokens in cookies');
-        //     throw HttpError(401, 'no refreshTokens in cookies');
-        // }
-        const { refreshToken } = req.body;
+        console.log("cookies: ", req.cookies);
+        const { refreshToken } = req.cookies;
         if (!refreshToken) {
-            throw HttpError(401);
+            console.log("no refreshTokens in cookies");
+            throw HttpError(401, "no refreshTokens in cookies");
         }
+        // const { refreshToken } = req.body;
+        // if (!refreshToken) {
+        //     throw HttpError(401);
+        // }
         console.log("refreshToken for logout: ", refreshToken);
         const user = await findByFilter(User, { refreshToken });
 

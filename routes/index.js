@@ -1,5 +1,6 @@
 import { Router } from "express";
-import usersRouter from "./authRouter.js";
+import authRouter from "./authRouter.js";
+import userRouter from "./userRouter.js";
 import boardRouter from "./boardRouter.js";
 import columRouter from "./columnRouter.js";
 import cardRouter from "./cardRouter.js";
@@ -7,7 +8,9 @@ import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const mainRouter = Router();
 
-mainRouter.use("/auth", usersRouter);
+mainRouter.use("/auth", authRouter);
+
+mainRouter.use("/users", userRouter);
 
 mainRouter.use("/board", authMiddleware, boardRouter);
 
