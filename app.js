@@ -14,7 +14,12 @@ const app = express();
 app.use(cookieParser());
 app.use(
     cors({
-        origin: process.env.URL_FRONT, // Замініть на домен, з якого ви відправляєте запити
+        origin: [
+            process.env.URL_FRONT,
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "https://dimkagrek.github.io",
+        ],
         credentials: true,
     })
 );
