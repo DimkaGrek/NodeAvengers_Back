@@ -6,7 +6,7 @@ import { deleteColumnAndCards } from "../services/ColumnService.js";
 export const getBoards = async (req, res, next) => {
     try {
         const { id } = req.user;
-        const boards = await Board.findByFilter({ userId: id });
+        const boards = await Board.find({ userId: id });
         res.json(boards);
     } catch (error) {
         next(error);
