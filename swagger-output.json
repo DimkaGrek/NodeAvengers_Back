@@ -21,13 +21,13 @@
                             "type": "object",
                             "properties": {
                                 "email": {
-                                    "example": "any"
+                                    "example": "admin@gmail.com"
                                 },
                                 "password": {
-                                    "example": "any"
+                                    "example": "qwerty123"
                                 },
                                 "name": {
-                                    "example": "any"
+                                    "example": "Anrey"
                                 }
                             }
                         }
@@ -35,7 +35,14 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "example": "admin@gmail.com"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -53,10 +60,10 @@
                             "type": "object",
                             "properties": {
                                 "email": {
-                                    "example": "any"
+                                    "example": "admin@gmail.com"
                                 },
                                 "password": {
-                                    "example": "any"
+                                    "example": "qwerty123"
                                 }
                             }
                         }
@@ -64,7 +71,42 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "accessToken": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                },
+                                "refreshToken": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "66226bed73c29e33133f0244"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "zzombi200125@gmail.com"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "User"
+                                        },
+                                        "avatarURL": {
+                                            "type": "string",
+                                            "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
+                                        },
+                                        "themeId": {
+                                            "type": "null",
+                                            "example": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -76,7 +118,7 @@
 
                 "parameters": [
                     {
-                        "name": "verificationToken",
+                        "name": "wNuI_osZzt6RuH4yVBvKM",
                         "in": "path",
                         "required": true,
                         "type": "string"
@@ -102,7 +144,7 @@
                             "type": "object",
                             "properties": {
                                 "email": {
-                                    "example": "any"
+                                    "example": "admin@gmail.com"
                                 }
                             }
                         }
@@ -110,7 +152,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "example": "Success"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -128,7 +177,7 @@
                             "type": "object",
                             "properties": {
                                 "token": {
-                                    "example": "any"
+                                    "example": "1-z7Pm7d7Dughu0Ynh6mE"
                                 }
                             }
                         }
@@ -136,7 +185,42 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "accessToken": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                },
+                                "refreshToken": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "66226bed73c29e33133f0244"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "zzombi200125@gmail.com"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "User"
+                                        },
+                                        "avatarURL": {
+                                            "type": "string",
+                                            "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
+                                        },
+                                        "themeId": {
+                                            "type": "null",
+                                            "example": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -144,11 +228,59 @@
         "/auth/refresh": {
             "get": {
                 "tags": ["User"],
-
                 "description": "",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                }
+                            }
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "accessToken": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                },
+                                "refreshToken": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "66226bed73c29e33133f0244"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "zzombi200125@gmail.com"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "User"
+                                        },
+                                        "avatarURL": {
+                                            "type": "string",
+                                            "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
+                                        },
+                                        "themeId": {
+                                            "type": "null",
+                                            "example": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -156,7 +288,6 @@
         "/auth/logout": {
             "post": {
                 "tags": ["User"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -166,7 +297,7 @@
                             "type": "object",
                             "properties": {
                                 "refreshToken": {
-                                    "example": "any"
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                 }
                             }
                         }
@@ -174,7 +305,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "refreshToken": {
+                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -210,46 +348,50 @@
                 }
             }
         },
-        "/auth/delete": {
-            "delete": {
-                "tags": ["User"],
-
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "example": "any"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/board/": {
             "get": {
                 "description": "",
                 "tags": ["Board"],
                 "parameters": [
                     {
-                        "name": "authorization",
+                        "name": "Bearer token",
                         "in": "header",
                         "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "example": "662433136df26838b508a9bd"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "sec trye"
+                                    },
+                                    "userId": {
+                                        "type": "string",
+                                        "example": "66226bed73c29e33133f0244"
+                                    },
+                                    "columns": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": [
+                                                "6624331d6df26838b508a9c3",
+                                                "6624331d6df26838b508a9c3",
+                                                "6624331d6df26838b508a9c3"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -273,7 +415,7 @@
                             "type": "object",
                             "properties": {
                                 "name": {
-                                    "example": "any"
+                                    "example": "board1"
                                 }
                             }
                         }
@@ -281,7 +423,27 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "example": "board1"
+                                },
+                                "userId": {
+                                    "type": "string",
+                                    "example": "66243605039254c689cd444b"
+                                },
+                                "columns": {
+                                    "type": "array",
+                                    "example": []
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "example": "66252b0840a640b903bd1abb"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -309,7 +471,80 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "string",
+                                    "example": "662433136df26838b508a9bd"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "sec trye"
+                                },
+                                "userId": {
+                                    "type": "string",
+                                    "example": "66226bed73c29e33133f0244"
+                                },
+                                "columns": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "example": "6624331d6df26838b508a9c3"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "12"
+                                            },
+                                            "boardId": {
+                                                "type": "string",
+                                                "example": "662433136df26838b508a9bd"
+                                            },
+                                            "cards": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "_id": {
+                                                            "type": "string",
+                                                            "example": "662433276df26838b508a9ca"
+                                                        },
+                                                        "title": {
+                                                            "type": "string",
+                                                            "example": "2"
+                                                        },
+                                                        "description": {
+                                                            "type": "string",
+                                                            "example": "hello?"
+                                                        },
+                                                        "priority": {
+                                                            "type": "string",
+                                                            "example": "high"
+                                                        },
+                                                        "deadline": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-04-17T14:00:00.000Z"
+                                                        },
+                                                        "columnId": {
+                                                            "type": "string",
+                                                            "example": "6624331d6df26838b508a9c3"
+                                                        },
+                                                        "__v": {
+                                                            "type": "integer",
+                                                            "example": 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -339,7 +574,7 @@
                             "type": "object",
                             "properties": {
                                 "name": {
-                                    "example": "any"
+                                    "example": "testName"
                                 }
                             }
                         }
@@ -347,7 +582,29 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "string",
+                                    "example": "662433136df26838b508a9bd"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "kaef"
+                                },
+                                "userId": {
+                                    "type": "string",
+                                    "example": "66226bed73c29e33133f0244"
+                                },
+                                "columns": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -373,7 +630,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -399,10 +656,10 @@
                             "type": "object",
                             "properties": {
                                 "name": {
-                                    "example": "any"
+                                    "example": "test1"
                                 },
                                 "boardId": {
-                                    "example": "any"
+                                    "example": "66243605039254c689cd444b"
                                 }
                             }
                         }
@@ -410,7 +667,27 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "example": "first"
+                                },
+                                "boardId": {
+                                    "type": "string",
+                                    "example": "66243605039254c689cd444b"
+                                },
+                                "cards": {
+                                    "type": "array",
+                                    "example": []
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "example": "662530a4058dbb5d245eebe2"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -434,11 +711,43 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "example": "test"
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "string",
+                                    "example": "662530a4058dbb5d245eebe2"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "test"
+                                },
+                                "boardId": {
+                                    "type": "string",
+                                    "example": "66243605039254c689cd444b"
+                                },
+                                "cards": {
+                                    "type": "array",
+                                    "example": []
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -490,7 +799,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -540,11 +849,74 @@
                         "name": "authorization",
                         "in": "header",
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "example": "3"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "example": "hello?"
+                                },
+                                "priority": {
+                                    "type": "string",
+                                    "example": "high"
+                                },
+                                "deadline": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2024-04-17T14:00:00.000Z"
+                                },
+                                "columnId": {
+                                    "type": "string",
+                                    "example": "6624331d6df26838b508a9c3"
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "string",
+                                    "example": "66243476afcebfe970385231"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "example": "3"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "example": "hello?"
+                                },
+                                "priority": {
+                                    "type": "string",
+                                    "example": "high"
+                                },
+                                "deadline": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2024-04-17T14:00:00.000Z"
+                                },
+                                "columnId": {
+                                    "type": "string",
+                                    "example": "6624331d6df26838b508a9c3"
+                                },
+                                "__v": {
+                                    "type": "integer",
+                                    "example": 0
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -570,7 +942,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -596,10 +968,25 @@
                             "type": "object",
                             "properties": {
                                 "title": {
-                                    "example": "any"
+                                    "type": "string",
+                                    "example": "test"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "example": "hello?"
+                                },
+                                "priority": {
+                                    "type": "string",
+                                    "example": "high"
+                                },
+                                "deadline": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2024-04-17T14:00:00.000Z"
                                 },
                                 "columnId": {
-                                    "example": "any"
+                                    "type": "string",
+                                    "example": "6624331d6df26838b508a9c3"
                                 }
                             }
                         }
@@ -607,7 +994,36 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "example": "hide"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "example": "hie?"
+                                },
+                                "priority": {
+                                    "type": "string",
+                                    "example": "high"
+                                },
+                                "deadline": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2024-04-17T14:00:00.000Z"
+                                },
+                                "columnId": {
+                                    "type": "string",
+                                    "example": "6624331d6df26838b508a9c3"
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "example": "66253ed2dcb8b0aab77a4f9f"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"

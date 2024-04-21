@@ -42,9 +42,26 @@ export const deleteCard = async (req, res, next) => {
 export const updateCard = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const card = await Card.findByIdAndUpdate(id, req.body, { new: true });
+        const { columnId } = req.body;
+        const card = await Card.findById(id);
         if (!card) throw HttpError(404, "Card not found");
-        res.json(card);
+
+        if (columnId) {
+            await Column.updateMany(
+                { cards: id },
+                { $pull: { cards: id } },
+                { multi: true }
+            );
+
+            const newColum = await Column.findById(columnId);
+            
+            newColum.cards.push(id);
+            await newColum.save();
+        }
+        const result = await Card.findByIdAndUpdate(id, req.body, {
+            new: true,
+        });
+        res.json(result);
     } catch (error) {
         next(error);
     }
