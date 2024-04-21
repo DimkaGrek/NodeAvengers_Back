@@ -16,6 +16,7 @@ const CardSchema = new Schema(
                 values: ["low", "medium", "high"],
                 message: `{VALUE} is not supported choose one of this "low", "medium", "hight"`,
             },
+            nullable: true,
         },
         deadline: {
             type: Date,
