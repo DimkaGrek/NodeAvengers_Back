@@ -130,6 +130,7 @@ const signin = async (req, res, next) => {
         res.cookie("refreshToken", user.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
+            Secure: true,
         });
         return res.json({ ...tokens, user: userDto });
     } catch (error) {
@@ -256,8 +257,9 @@ const deleteUser = async (req, res, next) => {
 
 const refresh = async (req, res, next) => {
     try {
-        const refreshToken = req.cookies.refreshToken;
-        console.log("refreshToken: ", refreshToken);
+        // const refreshToken = req.cookies.refreshToken;
+        // console.log("refreshToken: ", refreshToken);
+        const { refreshToken } = req.body;
         if (!refreshToken) {
             throw HttpError(401, "No refresh token provided'");
         }
