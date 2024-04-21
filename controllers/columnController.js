@@ -2,7 +2,6 @@ import HttpError from "../helpers/HttpError.js";
 import { Board } from "../models/board.model.js";
 import { Column } from "../models/column.model.js";
 import { deleteColumnAndCards } from "../services/ColumnService.js";
-import { find } from "../services/findOneService.js";
 
 export const getColumns = async (req, res, next) => {
     try {
@@ -16,9 +15,9 @@ export const getColumns = async (req, res, next) => {
 export const createColumn = async (req, res, next) => {
     try {
         const { name, boardId } = req.body;
-        const board = await Board.findById(boardId).populate('columns');
+        const board = await Board.findById(boardId).populate("columns");
         const isExistName = board.columns.find((el) => {
-           return el.name === name
+            return el.name === name;
         });
         if (isExistName)
             throw HttpError(400, "Colum with same name has already created");

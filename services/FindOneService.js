@@ -1,2 +1,1 @@
-
-export const find = (Model, filter) => Model.findOne(filter);
+export const findByFilter = (model, filter) => model.findOne(filter);

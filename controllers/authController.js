@@ -1,26 +1,26 @@
-import bcrypt from 'bcrypt';
-import gravatar from 'gravatar';
-import { nanoid } from 'nanoid';
-import queryString from 'query-string';
-import axios from 'axios';
-import { response } from 'express';
+import bcrypt from "bcrypt";
+import gravatar from "gravatar";
+import { nanoid } from "nanoid";
+import queryString from "query-string";
+import axios from "axios";
+import { response } from "express";
 
-import HttpError from '../helpers/HttpError.js';
-import authServices from '../services/authServices.js';
-import { User } from '../models/user.model.js';
-import MailService from '../services/MailService.js';
-import UserDto from '../dto/UserDto.js';
-import TokenService from '../services/TokenService.js';
-import { find } from '../services/findOneService.js';
+import HttpError from "../helpers/HttpError.js";
+import authServices from "../services/authServices.js";
+import { User } from "../models/user.model.js";
+import MailService from "../services/MailService.js";
+import UserDto from "../dto/UserDto.js";
+import TokenService from "../services/TokenService.js";
+import { findByFilter } from "../services/findOneService.js";
 
 const singup = async (req, res, next) => {
     try {
         const { email, password, name } = req.body;
 
-        const user = await find(User,{ email });
+        const user = await findByFilter(User, { email });
 
         if (user) {
-            throw HttpError(409, 'Email in use');
+            throw HttpError(409, "Email in use");
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
@@ -36,7 +36,7 @@ const singup = async (req, res, next) => {
         const newUser = await User.create({
             email,
             password: hashPassword,
-            name: name ? name : 'User',
+            name: name ? name : "User",
             avatarURL,
             verificationToken,
         });
@@ -49,15 +49,15 @@ const singup = async (req, res, next) => {
 const verify = async (req, res, next) => {
     try {
         let { verificationToken } = req.params;
-        console.log('verifyToken: ', verificationToken);
+        console.log("verifyToken: ", verificationToken);
         const user = await User.findOne({ verificationToken });
         if (!user) {
-            console.log('if no token');
+            console.log("if no token");
             return res.redirect(`${process.env.URL_SUCCESS}/2`);
         }
         await User.findByIdAndUpdate(user._id, {
             verify: true,
-            verificationToken: '',
+            verificationToken: "",
         });
 
         verificationToken = nanoid();
@@ -65,7 +65,7 @@ const verify = async (req, res, next) => {
         await user.save();
 
         console.log(
-            'url-redirect: ',
+            "url-redirect: ",
             `${process.env.URL_SUCCESS}/1?token=${verificationToken}`
         );
 
@@ -83,7 +83,7 @@ const resendEmail = async (req, res, next) => {
             throw HttpError(404);
         }
         if (user.verify) {
-            throw HttpError(400, 'Verification has already been passed');
+            throw HttpError(400, "Verification has already been passed");
         }
 
         await MailService.sendActivationMail(
@@ -92,7 +92,7 @@ const resendEmail = async (req, res, next) => {
         );
 
         res.json({
-            message: 'Email send success',
+            message: "Email send success",
         });
     } catch (error) {
         next(error);
@@ -102,14 +102,14 @@ const resendEmail = async (req, res, next) => {
 const signin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const user = await find(User, { email });
+        const user = await findByFilter(User, { email });
         if (!user) {
-            throw HttpError(401, 'Email or password wrong');
+            throw HttpError(401, "Email or password wrong");
         }
 
         // check if user verified
         if (!user.verify) {
-            throw HttpError(403, 'User is not verified yet');
+            throw HttpError(403, "User is not verified yet");
         }
 
         //check password
@@ -118,7 +118,7 @@ const signin = async (req, res, next) => {
             user.password
         );
         if (!comparePassword) {
-            throw HttpError(401, 'Email or password wrong');
+            throw HttpError(401, "Email or password wrong");
         }
         const userDto = new UserDto(user);
 
@@ -127,7 +127,7 @@ const signin = async (req, res, next) => {
         user.accessToken = tokens.accessToken;
         user.refreshToken = tokens.refreshToken;
         await user.save();
-        res.cookie('refreshToken', user.refreshToken, {
+        res.cookie("refreshToken", user.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
@@ -141,16 +141,16 @@ const verifyLogin = async (req, res, next) => {
     try {
         const { token } = req.body;
 
-        console.log('token from verify page', token);
+        console.log("token from verify page", token);
         const user = await User.findOne({ verificationToken: token });
 
         if (!user) {
-            console.log('if no user verify token....');
-            throw HttpError(404, 'No user found');
+            console.log("if no user verify token....");
+            throw HttpError(404, "No user found");
         }
 
-        user.verificationToken = '';
-        console.log('verifyToken delete...');
+        user.verificationToken = "";
+        console.log("verifyToken delete...");
 
         const userDto = new UserDto(user);
 
@@ -159,7 +159,7 @@ const verifyLogin = async (req, res, next) => {
         user.accessToken = tokens.accessToken;
         user.refreshToken = tokens.refreshToken;
         await user.save();
-        res.cookie('refreshToken', user.refreshToken, {
+        res.cookie("refreshToken", user.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
@@ -171,17 +171,17 @@ const verifyLogin = async (req, res, next) => {
 
 const googleAuth = async (req, res, next) => {
     try {
-        console.log('client_id: ', process.env.GOOGLE_CLIENT_ID);
+        console.log("client_id: ", process.env.GOOGLE_CLIENT_ID);
         const stringifiedParams = queryString.stringify({
             client_id: process.env.GOOGLE_CLIENT_ID,
             redirect_uri: `${process.env.API_URL}${process.env.API_PREFIX}/auth/google-redirect`,
             scope: [
-                'https://www.googleapis.com/auth/userinfo.email',
-                'https://www.googleapis.com/auth/userinfo.profile',
-            ].join(' '),
-            response_type: 'code',
-            access_type: 'offline',
-            prompt: 'consent',
+                "https://www.googleapis.com/auth/userinfo.email",
+                "https://www.googleapis.com/auth/userinfo.profile",
+            ].join(" "),
+            response_type: "code",
+            access_type: "offline",
+            prompt: "consent",
         });
         return res.redirect(
             `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
@@ -196,26 +196,26 @@ const googleRedirect = async (req, res, next) => {
         const { code } = req.query;
 
         const tokenData = await axios({
-            url: 'https://oauth2.googleapis.com/token',
-            method: 'post',
+            url: "https://oauth2.googleapis.com/token",
+            method: "post",
             data: {
                 client_id: process.env.GOOGLE_CLIENT_ID,
                 client_secret: process.env.GOOGLE_CLIENT_SECRET,
                 redirect_uri: `${process.env.API_URL}${process.env.API_PREFIX}/auth/google-redirect`,
-                grant_type: 'authorization_code',
+                grant_type: "authorization_code",
                 code,
             },
         });
         const userData = await axios({
-            url: 'https://www.googleapis.com/oauth2/v2/userinfo',
-            method: 'get',
+            url: "https://www.googleapis.com/oauth2/v2/userinfo",
+            method: "get",
             headers: {
                 Authorization: `Bearer ${tokenData.data.access_token}`,
             },
         });
 
         const { email, name, picture } = userData.data;
-        let user = await find(User,{ email });
+        let user = await findByFilter(User, { email });
         if (!user) {
             const newUser = await User.create({
                 email,
@@ -242,13 +242,13 @@ const googleRedirect = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
     try {
         const { email } = req.body;
-        const user = await find(User,{ email });
+        const user = await findByFilter(User, { email });
         if (!user) {
-            throw HttpError(404, 'No user found');
+            throw HttpError(404, "No user found");
         }
         await User.deleteOne({ email });
 
-        res.json({ message: 'user deleted successfully' });
+        res.json({ message: "user deleted successfully" });
     } catch (error) {
         next(error);
     }
@@ -257,13 +257,13 @@ const deleteUser = async (req, res, next) => {
 const refresh = async (req, res, next) => {
     try {
         const refreshToken = req.cookies.refreshToken;
-        console.log('refreshToken: ', refreshToken);
+        console.log("refreshToken: ", refreshToken);
         if (!refreshToken) {
             throw HttpError(401, "No refresh token provided'");
         }
         const userData = TokenService.validateRefreshToken(refreshToken);
-        console.log('userData: ', userData);
-        const user = await find(User,{ refreshToken });
+        console.log("userData: ", userData);
+        const user = await findByFilter(User, { refreshToken });
         if (!userData || !user.refreshToken) {
             throw HttpError(401);
         }
@@ -274,7 +274,7 @@ const refresh = async (req, res, next) => {
         user.accessToken = tokens.accessToken;
         user.refreshToken = tokens.refreshToken;
         await user.save();
-        res.cookie('refreshToken', user.refreshToken, {
+        res.cookie("refreshToken", user.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
@@ -296,18 +296,18 @@ const logout = async (req, res, next) => {
         if (!refreshToken) {
             throw HttpError(401);
         }
-        console.log('refreshToken for logout: ', refreshToken);
-        const user = await find(User,{ refreshToken });
+        console.log("refreshToken for logout: ", refreshToken);
+        const user = await findByFilter(User, { refreshToken });
 
         if (!user) {
-            console.log('no user by refreshToken');
+            console.log("no user by refreshToken");
             throw HttpError(401);
         }
-        console.log('user find by refreshToken');
-        user.accessToken = '';
-        user.refreshToken = '';
+        console.log("user findByFilter by refreshToken");
+        user.accessToken = "";
+        user.refreshToken = "";
         await user.save();
-        res.clearCookie('refreshToken');
+        res.clearCookie("refreshToken");
         return res.status(200).json(refreshToken);
     } catch (error) {
         next(error);

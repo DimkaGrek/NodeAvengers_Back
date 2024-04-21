@@ -1,12 +1,12 @@
 import { Board } from "../models/board.model.js";
 import HttpError from "../helpers/HttpError.js";
-import { find } from "../services/findOneService.js";
+import { findByFilter } from "../services/findOneService.js";
 import { deleteColumnAndCards } from "../services/ColumnService.js";
 
 export const getBoards = async (req, res, next) => {
     try {
         const { id } = req.user;
-        const boards = await Board.find({ userId: id });
+        const boards = await Board.findByFilter({ userId: id });
         res.json(boards);
     } catch (error) {
         next(error);
@@ -31,7 +31,7 @@ export const createBoard = async (req, res, next) => {
     try {
         const { name } = req.body;
         const { id } = req.user;
-        const findName = await find(Board, { name });
+        const findName = await findByFilter(Board, { name });
         if (findName)
             throw HttpError(400, "Board with same name has already created");
         const board = await Board.create({ name, userId: id });

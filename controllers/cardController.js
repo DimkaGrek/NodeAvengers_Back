@@ -1,6 +1,6 @@
 import { Card } from "../models/card.model.js";
 import { Column } from "../models/column.model.js";
-import { find } from "../services/findOneService.js";
+import { findByFilter } from "../services/findOneService.js";
 import HttpError from "../helpers/HttpError.js";
 
 export const getCard = async (req, res, next) => {
@@ -16,10 +16,10 @@ export const getCard = async (req, res, next) => {
 export const createCard = async (req, res, next) => {
     try {
         const { title, columnId } = req.body;
-        const findName = await find(Card, { title });
+        const findName = await findByFilter(Card, { title });
         if (findName)
             throw HttpError(400, "Card with same title has already created");
-        const column = await find(Column, { _id: columnId });
+        const column = await findByFilter(Column, { _id: columnId });
         if (!column) throw HttpError(404, "Colum not found");
         const card = await Card.create(req.body);
         column.cards.push(card._id);
