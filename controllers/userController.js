@@ -20,7 +20,7 @@ export const getUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
     try {
         const { id } = req.params;
-        console.log("req.file.path: ", req.file.path);
+        // console.log("req.file.path: ", req.file.path);
         console.log("req.body ", req.body);
         const { userData } = req.body;
         const parseData = JSON.parse(userData);
@@ -28,7 +28,7 @@ export const updateUser = async (req, res, next) => {
         const { name, email, password, newpassword } = parseData;
         const user = await User.findById(id);
 
-        user.avatarURL = req.file.path;
+        user.avatarURL = req.file?.path;
 
         if (name) {
             user.name = name;
@@ -54,6 +54,7 @@ export const updateUser = async (req, res, next) => {
 
         res.json(userDto);
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };
