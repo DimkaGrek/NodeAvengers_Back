@@ -1,6 +1,6 @@
 import { Board } from "../models/board.model.js";
 import HttpError from "../helpers/HttpError.js";
-import { findByFilter } from "../services/findOneService.js";
+import { findByFilter } from "../services/FindOneService.js";
 import { deleteColumnAndCards } from "../services/ColumnService.js";
 
 export const getBoards = async (req, res, next) => {

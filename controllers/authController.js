@@ -11,7 +11,7 @@ import { User } from "../models/user.model.js";
 import MailService from "../services/MailService.js";
 import UserDto from "../dto/UserDto.js";
 import TokenService from "../services/TokenService.js";
-import { findByFilter } from "../services/findOneService.js";
+import { findByFilter } from "../services/FindOneService.js";
 
 const singup = async (req, res, next) => {
     try {

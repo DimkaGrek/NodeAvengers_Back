@@ -1,6 +1,6 @@
 import { Card } from "../models/card.model.js";
 import { Column } from "../models/column.model.js";
-import { findByFilter } from "../services/findOneService.js";
+import { findByFilter } from "../services/FindOneService.js";
 import HttpError from "../helpers/HttpError.js";
 
 export const getCard = async (req, res, next) => {
