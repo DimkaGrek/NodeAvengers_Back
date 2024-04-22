@@ -56,7 +56,6 @@ export const deleteBoard = async (req, res, next) => {
 export const updateBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
-
         const board = await Board.findByIdAndUpdate(id, req.body, {
             new: true,
         });
