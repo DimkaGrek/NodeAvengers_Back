@@ -7,6 +7,7 @@ import {
     updateUser,
     getUser,
     changeUserTheme,
+    supportUser,
 } from "../controllers/userController.js";
 
 // upload
@@ -49,5 +50,6 @@ const userRouter = express.Router();
 userRouter.get("/:id", getUser);
 userRouter.put("/:id", upload.single("avatar"), updateUser);
 userRouter.patch("/:id/theme", changeUserTheme);
+userRouter.post("/:id/support", supportUser);
 
 export default userRouter;
