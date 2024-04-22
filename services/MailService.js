@@ -72,12 +72,12 @@ class MailService {
             html: `
                     <div>
                         <h1>Support Task pro</h1>
-                        <h2>User email</h2>
-                        <p>${userEmail}</p>
-                        <h2>Subject</h2>
-                        <p>${title}</p>
-                        <h2>Description</h2>
-                        <p>${description}</p>
+
+                        <h2><u>User email:</u> ${userEmail}</h2>
+
+                        <h2><u>Subject:</u> ${title}</h2>
+                        <h2><u>Description:</u></h2>
+                        <h3>${description}</h3>
                     </div>
                 `,
         });

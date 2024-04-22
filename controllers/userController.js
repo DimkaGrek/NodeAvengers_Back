@@ -6,6 +6,7 @@ import { findByFilter } from "../services/FindOneService.js";
 import authServices from "../services/authServices.js";
 import UserDto from "../dto/UserDto.js";
 import { Email } from "../models/email.model.js";
+import MailService from "../services/MailService.js";
 
 export const getUser = async (req, res, next) => {
     try {
@@ -101,10 +102,11 @@ export const changeUserTheme = async (req, res, next) => {
 export const supportUser = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const user = User.findById(id);
+        const user = await User.findById(id);
         if (!user) {
             throw HttpError(404, "No user found");
         }
+        console.log("user: ", user);
         const { title, description } = req.body;
 
         await MailService.sendSupportMail(
@@ -114,11 +116,13 @@ export const supportUser = async (req, res, next) => {
             user.email
         );
 
-        const support = Email.create({
+        const support = await Email.create({
             title,
             description,
             userId: user._id,
         });
+        console.log(support);
+
         res.status(201).json(support);
     } catch (error) {
         next(error);
