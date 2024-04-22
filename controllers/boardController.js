@@ -56,10 +56,10 @@ export const deleteBoard = async (req, res, next) => {
 export const updateBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { name, icon, backgroundImage } = req.body;
         const board = await Board.findByIdAndUpdate(
             id,
-            { name },
+            { name, icon, backgroundImage },
             { new: true }
         );
         if (!board) throw HttpError(404, "Board not found");
