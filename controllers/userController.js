@@ -22,8 +22,9 @@ export const updateUser = async (req, res, next) => {
         const { id } = req.params;
         const user = await User.findById(id);
         if (!user) {
-            throw HttpError(404);
+            throw HttpError(404, "No user found");
         }
+        const errors = [];
         // check if request contains file
         console.log("avatarURL before check: ", user.avatarURL);
         if (req.file) {
@@ -53,6 +54,9 @@ export const updateUser = async (req, res, next) => {
                         user.password
                     );
                     if (!comparePassword) {
+                        errors.push({
+                            403: "Your current password is not valid",
+                        });
                         throw HttpError(
                             403,
                             "Your current password is not valid"
@@ -71,7 +75,7 @@ export const updateUser = async (req, res, next) => {
         // console.log("user: ", user);
         const userDto = new UserDto(user);
 
-        res.json(userDto);
+        res.json({ ...userDto, errors });
     } catch (error) {
         console.log(error);
         next(error);
