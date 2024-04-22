@@ -6,10 +6,12 @@ import {
     deleteCard,
     updateCard,
 } from "../controllers/cardController.js";
+import { cardSchemaJoi } from "../schemas/card.schema.js";
+import { validateBody } from "../helpers/ValidateBody.js";
 
 const cardRouter = express.Router();
 cardRouter.get("/:id", getCard);
-cardRouter.post("/", createCard);
+cardRouter.post("/", validateBody(cardSchemaJoi), createCard);
 cardRouter.put("/:id", updateCard);
 cardRouter.delete("/:id", deleteCard);
 
