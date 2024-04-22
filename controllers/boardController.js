@@ -34,7 +34,7 @@ export const createBoard = async (req, res, next) => {
         const findName = await findByFilter(Board, { name });
         if (findName)
             throw HttpError(400, "Board with same name has already created");
-        const board = await Board.create({ name, userId: id });
+        const board = await Board.create({ ...req.body, userId: id });
         res.json(board);
     } catch (error) {
         next(error);
@@ -56,12 +56,9 @@ export const deleteBoard = async (req, res, next) => {
 export const updateBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { name, icon, backgroundImage } = req.body;
-        const board = await Board.findByIdAndUpdate(
-            id,
-            { name, icon, backgroundImage },
-            { new: true }
-        );
+        const board = await Board.findByIdAndUpdate(id, req.body, {
+            new: true,
+        });
         if (!board) throw HttpError(404, "Board not found");
         res.json(board);
     } catch (error) {

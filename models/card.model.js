@@ -17,6 +17,7 @@ const CardSchema = new Schema(
                 message: `{VALUE} is not supported choose one of this "low", "medium", "hight"`,
             },
             nullable: true,
+            default: null
         },
         deadline: {
             type: Date,
@@ -25,6 +26,7 @@ const CardSchema = new Schema(
         columnId: {
             type: Schema.Types.ObjectId,
             ref: "Column",
+            required: [true, 'columnId is required']
         },
     },
     { versionKey: false }

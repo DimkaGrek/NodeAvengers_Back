@@ -7,11 +7,13 @@ import {
     deleteBoard,
     updateBoard,
 } from "../controllers/boardController.js";
+import { boardSchemaJoi } from "../schemas/board.schema.js";
+import { validateBody } from "../helpers/ValidateBody.js";
 
 const boardRouter = express.Router();
 boardRouter.get("/", getBoards);
 boardRouter.get("/:id", getBoard);
-boardRouter.post("/", createBoard);
+boardRouter.post("/", validateBody(boardSchemaJoi), createBoard);
 boardRouter.put("/:id", updateBoard);
 boardRouter.delete("/:id", deleteBoard);
 
