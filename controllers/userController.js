@@ -20,34 +20,53 @@ export const getUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const user = await User.findById(id);
+        if (!user) {
+            throw HttpError(404);
+        }
+        // check if request contains file
+        console.log("avatarURL before check: ", user.avatarURL);
+        if (req.file) {
+            user.avatarURL = req.file.path;
+        }
+        console.log("avatarURL after check: ", user.avatarURL);
+
         // console.log("req.file.path: ", req.file.path);
         console.log("req.body ", req.body);
         const { userData } = req.body;
-        const parseData = JSON.parse(userData);
-        console.log("userData: ", parseData);
-        const { name, email, password, newpassword } = parseData;
-        const user = await User.findById(id);
+        if (userData) {
+            try {
+                const parseData = JSON.parse(userData);
+                console.log("userData: ", parseData);
+                const { name, email, password, newpassword } = parseData;
 
-        user.avatarURL = req.file?.path;
-
-        if (name) {
-            user.name = name;
-        }
-        if (email) {
-            user.email = email;
-        }
-        if (password && newpassword) {
-            //check password
-            const comparePassword = await authServices.validatePassword(
-                password,
-                user.password
-            );
-            if (!comparePassword) {
-                throw HttpError(403, "Your current password is not valid");
+                if (name) {
+                    user.name = name;
+                }
+                if (email) {
+                    user.email = email;
+                }
+                if (password && newpassword) {
+                    //check password
+                    const comparePassword = await authServices.validatePassword(
+                        password,
+                        user.password
+                    );
+                    if (!comparePassword) {
+                        throw HttpError(
+                            403,
+                            "Your current password is not valid"
+                        );
+                    }
+                    const hashPassword = await bcrypt.hash(newpassword, 10);
+                    user.password = hashPassword;
+                }
+            } catch (error) {
+                console.error(error);
             }
-            const hashPassword = await bcrypt.hash(newpassword, 10);
-            user.password = hashPassword;
         }
+
+        console.log("user before save: ", user);
         await user.save();
         // console.log("user: ", user);
         const userDto = new UserDto(user);
