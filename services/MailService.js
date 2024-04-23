@@ -47,6 +47,41 @@ class MailService {
                 `,
         });
     }
+
+    async sendPasswordMail(to, password) {
+        await this.trasporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: "Your Password on " + process.env.API_URL,
+            text: "",
+            html: `
+                    <div>
+                        <h1>For sing in using email/password, please use this password.</h1>
+                        ${password}
+                    </div>
+                `,
+        });
+    }
+
+    async sendSupportMail(to, title, description, userEmail) {
+        await this.trasporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: `Support needed from ${userEmail} ` + process.env.API_URL,
+            text: "",
+            html: `
+                    <div>
+                        <h1>Support Task pro</h1>
+
+                        <h2><u>User email:</u> ${userEmail}</h2>
+
+                        <h2><u>Subject:</u> ${title}</h2>
+                        <h2><u>Description:</u></h2>
+                        <h3>${description}</h3>
+                    </div>
+                `,
+        });
+    }
 }
 
 export default new MailService();

@@ -5,6 +5,8 @@ import HttpError from "../helpers/HttpError.js";
 import { findByFilter } from "../services/FindOneService.js";
 import authServices from "../services/authServices.js";
 import UserDto from "../dto/UserDto.js";
+import { Email } from "../models/email.model.js";
+import MailService from "../services/MailService.js";
 
 export const getUser = async (req, res, next) => {
     try {
@@ -92,6 +94,36 @@ export const changeUserTheme = async (req, res, next) => {
         await User.findByIdAndUpdate(id, { themeId }, { new: true });
 
         res.json({ themeId });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const supportUser = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findById(id);
+        if (!user) {
+            throw HttpError(404, "No user found");
+        }
+        console.log("user: ", user);
+        const { title, description } = req.body;
+
+        await MailService.sendSupportMail(
+            process.env.SMTP_USER,
+            title,
+            description,
+            user.email
+        );
+
+        const support = await Email.create({
+            title,
+            description,
+            userId: user._id,
+        });
+        console.log(support);
+
+        res.status(201).json(support);
     } catch (error) {
         next(error);
     }
