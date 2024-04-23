@@ -262,13 +262,13 @@ const refresh = async (req, res, next) => {
         // console.log("refreshToken: ", refreshToken);
         const { refreshToken } = req.body;
         if (!refreshToken) {
-            throw HttpError(401, "No refresh token provided'");
+            throw HttpError(401, "No refresh token provided");
         }
         const userData = TokenService.validateRefreshToken(refreshToken);
         console.log("userData: ", userData);
         const user = await findByFilter(User, { refreshToken });
         if (!userData || !user.refreshToken) {
-            throw HttpError(401);
+            throw HttpError(401, "refreshToken is not valid");
         }
         const userDto = new UserDto(user);
 
@@ -297,21 +297,21 @@ const logout = async (req, res, next) => {
         // }
         const { refreshToken } = req.body;
         if (!refreshToken) {
-            throw HttpError(401);
+            throw HttpError(401, "No refresh token");
         }
         console.log("refreshToken for logout: ", refreshToken);
         const user = await findByFilter(User, { refreshToken });
 
         if (!user) {
-            console.log("no user by refreshToken");
-            throw HttpError(401);
+            console.log("no user with this refreshToken");
+            throw HttpError(401, "No user with this refreshToken");
         }
         console.log("user findByFilter by refreshToken");
         user.accessToken = "";
         user.refreshToken = "";
         await user.save();
         res.clearCookie("refreshToken");
-        return res.status(200).json(refreshToken);
+        return res.status(204).json();
     } catch (error) {
         next(error);
     }

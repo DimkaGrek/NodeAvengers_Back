@@ -7,131 +7,112 @@
     },
     "servers": [
         {
-            "url": "http://localhost:3000/api/"
+            "url": "https://nodeavengers-back.onrender.com/api/"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Registration/Login user"
+        },
+        {
+            "name": "User",
+            "description": "Get and Update user"
         }
     ],
     "paths": {
         "/auth/register": {
             "post": {
-                "description": "Users",
+                "summary": "Register a new user",
+                "operationId": "registerUser",
                 "tags": ["Auth"],
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "example": "admin@gmail.com"
-                                },
-                                "password": {
-                                    "example": "qwerty123"
-                                },
-                                "name": {
-                                    "example": "Anrey"
-                                }
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRegistration"
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "201": {
+                        "description": "User registered successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
                                         "email": {
-                                            "example": "admin@gmail.com"
+                                            "example": "john.doe@example.com"
                                         }
                                     }
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "409": {
+                        "description": "Email in use"
                     }
                 }
             }
         },
         "/auth/login": {
             "post": {
-                "description": "",
+                "summary": "Login user",
+                "operationId": "loginUser",
                 "tags": ["Auth"],
-
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "example": "admin@gmail.com"
-                                },
-                                "password": {
-                                    "example": "qwerty123"
-                                }
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLogin"
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
+                        "description": "Ok",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "accessToken": {
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                        },
-                                        "refreshToken": {
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                        },
-                                        "user": {
-                                            "type": "object",
-                                            "properties": {
-                                                "id": {
-                                                    "type": "string",
-                                                    "example": "66226bed73c29e33133f0244"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "zzombi200125@gmail.com"
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "User"
-                                                },
-                                                "avatarURL": {
-                                                    "type": "string",
-                                                    "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
-                                                },
-                                                "themeId": {
-                                                    "type": "null",
-                                                    "example": null
-                                                }
-                                            }
-                                        }
-                                    }
+                                    "$ref": "#/components/schemas/UserLoginResponse"
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Email or password wrong"
+                    },
+                    "403": {
+                        "description": "User is not verified yet"
                     }
                 }
             }
         },
         "/auth/verify/{verificationToken}": {
             "get": {
-                "description": "",
+                "summary": "Verify user by Verification Token",
+                "description": "Verify user by Verification Token",
                 "tags": ["Auth"],
-
                 "parameters": [
                     {
-                        "name": "wNuI_osZzt6RuH4yVBvKM",
+                        "name": "verificationToken",
                         "in": "path",
+                        "description": "verification token",
                         "required": true,
-                        "type": "string"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -143,166 +124,124 @@
         },
         "/auth/verify": {
             "post": {
-                "description": "",
+                "summary": "Resend verification Email",
+                "description": "Resend verification Email",
                 "tags": ["Auth"],
-
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "example": "admin@gmail.com"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@gmail.com"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
+                        "description": "Email send successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
                                         "message": {
-                                            "example": "Success"
+                                            "type": "string",
+                                            "example": "Email send success"
                                         }
                                     }
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Verification has already been passed"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
         },
         "/auth/verifyLogin": {
             "post": {
-                "description": "",
+                "summary": "in case singup/singin by social accounts",
+                "description": "in case singup/singin by social accounts",
                 "tags": ["Auth"],
-
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "token": {
-                                    "example": "1-z7Pm7d7Dughu0Ynh6mE"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "accessToken": {
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                        },
-                                        "refreshToken": {
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                        },
-                                        "user": {
-                                            "type": "object",
-                                            "properties": {
-                                                "id": {
-                                                    "type": "string",
-                                                    "example": "66226bed73c29e33133f0244"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "zzombi200125@gmail.com"
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "User"
-                                                },
-                                                "avatarURL": {
-                                                    "type": "string",
-                                                    "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
-                                                },
-                                                "themeId": {
-                                                    "type": "null",
-                                                    "example": null
-                                                }
-                                            }
-                                        }
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "example": "1-z7Pm7d7Dughu0Ynh6mE"
                                     }
                                 }
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserLoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
         },
         "/auth/refresh": {
-            "get": {
+            "post": {
                 "tags": ["Auth"],
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "token": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "accessToken": {
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                        },
-                                        "refreshToken": {
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                        },
-                                        "user": {
-                                            "type": "object",
-                                            "properties": {
-                                                "id": {
-                                                    "type": "string",
-                                                    "example": "66226bed73c29e33133f0244"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "zzombi200125@gmail.com"
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "User"
-                                                },
-                                                "avatarURL": {
-                                                    "type": "string",
-                                                    "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
-                                                },
-                                                "themeId": {
-                                                    "type": "null",
-                                                    "example": null
-                                                }
-                                            }
-                                        }
+                "summary": "Send new access and refresh tokens",
+                "description": "Send new access and refresh tokens",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                     }
                                 }
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserLoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No refresh token provided, refreshToken is not valid"
                     }
                 }
             }
@@ -310,125 +249,86 @@
         "/auth/logout": {
             "post": {
                 "tags": ["Auth"],
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "refreshToken": {
-                                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "refreshToken": {
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                        }
+                "summary": "Logout user",
+                "description": "Logout user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "refreshToken": {
+                                        "type": "string",
+                                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                                     }
                                 }
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": "No refresh token, No user with this refreshToken"
                     }
                 }
             }
         },
         "/auth/resendEmail": {
             "post": {
+                "summary": "Resend verification Email",
+                "description": "Resend verification Email",
                 "tags": ["Auth"],
-
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                },
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
                                 "properties": {
                                     "email": {
-                                        "example": "example@gmail.com"
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@gmail.com"
                                     }
                                 }
                             }
                         }
-                    }
-                }
-            }
-        },
-        "/auth/google": {
-            "get": {
-                "tags": ["Auth"],
-
-                "description": "",
-                "responses": {
-                    "default": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/auth/google-redirect": {
-            "get": {
-                "tags": ["Auth"],
-
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "code",
-                        "in": "query",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "default": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/auth/delete": {
-            "delete": {
-                "description": "",
-                "tags": ["Auth"],
-
-                "responses": {
-                    "200": {
-                        "description": "OK"
                     }
                 },
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "email": {
-                                        "example": "any"
+                "responses": {
+                    "200": {
+                        "description": "Email send successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email send success"
+                                        }
                                     }
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Verification has already been passed"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
         },
         "/users/{id}": {
             "get": {
-                "description": "",
+                "summary": "Get current user",
+                "description": "Get current user",
                 "tags": ["User"],
                 "parameters": [
                     {
@@ -442,62 +342,64 @@
                 ],
                 "responses": {
                     "200": {
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "id": {
-                                            "type": "string",
-                                            "example": "66226b9a73c29e33133f0240"
-                                        },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "zzombi200124@gmail.com"
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "User"
-                                        },
-                                        "avatarURL": {
-                                            "type": "string",
-                                            "example": "//www.gravatar.com/avatar/c8d6f4ba6b5b119ce2a5220640d82b22"
+                                    "$ref": "#/components/schemas/UserLoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No user found"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Change User data",
+                "description": "Change User data",
+                "tags": ["User"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "avatar": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "avatar image to be uploaded"
+                                    },
+                                    "userData": {
+                                        "type": "string",
+                                        "description": "user data in JSON format",
+                                        "example": {
+                                            "name": "Jonh"
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                }
-            },
-            "put": {
-                "description": "",
-                "tags": ["User"],
-
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                },
                 "responses": {
                     "200": {
-                        "description": "OK"
-                    }
-                },
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "userData": {
-                                        "example": "any"
-                                    }
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserUpdateResponse"
                                 }
                             }
                         }
@@ -508,8 +410,8 @@
         "/users/{id}/theme": {
             "patch": {
                 "tags": ["User"],
-
-                "description": "",
+                "summary": "Change user theme",
+                "description": "Change user theme",
                 "parameters": [
                     {
                         "name": "id",
@@ -520,8 +422,25 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "themeId": {
+                                        "type": "string",
+                                        "example": "6625452c0713afbc276181f7"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -534,65 +453,18 @@
                                 }
                             }
                         }
-                    }
-                },
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "themeId": {
-                                        "example": "66226bed73c29e33133f0244"
-                                    }
-                                }
-                            }
-                        }
+                    },
+                    "400": {
+                        "description": "No themeId"
                     }
                 }
             }
         },
-        "/themes/": {
-            "get": {
-                "description": "",
-                "tags": ["Theme"],
-
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "post": {
-                "description": "",
-                "tags": ["Theme"],
-
-                "responses": {
-                    "201": {
-                        "description": "Created"
-                    }
-                },
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "example": "any"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/themes/{id}": {
-            "put": {
-                "description": "",
-                "tags": ["Theme"],
-
+        "/users/{id}/support": {
+            "patch": {
+                "tags": ["User"],
+                "summary": "Send Email Support",
+                "description": "Send Email Support",
                 "parameters": [
                     {
                         "name": "id",
@@ -603,11 +475,150 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Don't work resend email"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Some problem with resend email, please help me"
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
+                "responses": {
+                    "201": {
+                        "description": "Email sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Don't work resend email"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Some problem with resend email, please help me"
+                                        },
+                                        "userId": {
+                                            "type": "string",
+                                            "example": "66240204c1ba91d52d2f44c7"
+                                        },
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "6626cb8e1988dfdae31ab005"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No user found"
+                    }
+                }
+            }
+        },
+        "/themes/": {
+            "get": {
+                "summary": "Get list of themes",
+                "description": "Get list of themes",
+                "tags": ["Theme"],
+                "responses": {
+                    "200": {
+                        "description": "A list of themes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id:": {
+                                                "type": "string",
+                                                "example": "6625452c0713afbc276181f7",
+                                                "description": "The unique identifier of the theme"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Dark",
+                                                "description": "The name of the theme"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new theme",
+                "description": "Create a new theme",
+                "tags": ["Theme"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "any"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": null,
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "any"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/themes/{id}": {
+            "put": {
+                "summary": "Change name of theme",
+                "description": "Change name of theme",
+                "tags": ["Theme"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -621,12 +632,38 @@
                             }
                         }
                     }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": null,
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "example": "6625452c0713afbc276181f7",
+                                        "description": "theme id"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "any",
+                                        "description": "name of theme"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
                 }
             },
             "delete": {
-                "description": "",
+                "summary": "Delete theme",
+                "description": "Delete theme",
                 "tags": ["Theme"],
-
                 "parameters": [
                     {
                         "name": "id",
@@ -657,6 +694,7 @@
                 ],
                 "responses": {
                     "200": {
+                        "description": "Ok",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -701,7 +739,6 @@
             "post": {
                 "description": "",
                 "tags": ["Board"],
-
                 "parameters": [
                     {
                         "name": "authorization",
@@ -723,6 +760,7 @@
                 ],
                 "responses": {
                     "200": {
+                        "description": "Ok",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -758,7 +796,6 @@
         "/board/{id}": {
             "get": {
                 "tags": ["Board"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -775,6 +812,7 @@
                 ],
                 "responses": {
                     "200": {
+                        "description": "Ok",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -861,7 +899,6 @@
             },
             "put": {
                 "tags": ["Board"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -925,7 +962,6 @@
             },
             "delete": {
                 "tags": ["Board"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -954,7 +990,6 @@
             "post": {
                 "description": "",
                 "tags": ["Colum"],
-
                 "parameters": [
                     {
                         "name": "authorization",
@@ -1014,7 +1049,6 @@
         "/colum/{id}": {
             "put": {
                 "tags": ["Colum"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -1077,7 +1111,6 @@
             "get": {
                 "description": "",
                 "tags": ["Colum"],
-
                 "parameters": [
                     {
                         "name": "id",
@@ -1103,7 +1136,6 @@
             "delete": {
                 "description": "",
                 "tags": ["Colum"],
-
                 "parameters": [
                     {
                         "name": "id",
@@ -1130,7 +1162,6 @@
         "/card/{id}": {
             "get": {
                 "tags": ["Card"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -1157,7 +1188,6 @@
             "put": {
                 "description": "",
                 "tags": ["Card"],
-
                 "parameters": [
                     {
                         "name": "id",
@@ -1249,7 +1279,6 @@
             },
             "delete": {
                 "tags": ["Card"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -1277,7 +1306,6 @@
         "/card/": {
             "post": {
                 "tags": ["Card"],
-
                 "description": "",
                 "parameters": [
                     {
@@ -1355,6 +1383,151 @@
                     },
                     "401": {
                         "description": "Unauthorized"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "UserRegistration": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe",
+                        "description": "User's full name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john.doe@example.com",
+                        "description": "User's email address"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "123456",
+                        "description": "User's password"
+                    }
+                },
+                "required": ["email", "password"]
+            },
+            "UserLogin": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john.doe@example.com",
+                        "description": "User's email address"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "123456",
+                        "description": "User's password"
+                    }
+                },
+                "required": ["email", "password"]
+            },
+            "UserLoginResponse": {
+                "type": "object",
+                "properties": {
+                    "accessToken": {
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "refreshToken": {
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "example": "66226bed73c29e33133f0244"
+                            },
+                            "email": {
+                                "type": "string",
+                                "example": "zzombi200125@gmail.com"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "User"
+                            },
+                            "avatarURL": {
+                                "type": "string",
+                                "example": "//www.gravatar.com/avatar/1c8bbe168cef635b6ccd3fdd979bb3ee"
+                            },
+                            "themeId": {
+                                "type": "string",
+                                "example": "6625452c0713afbc276181f7"
+                            }
+                        }
+                    }
+                }
+            },
+            "UserGetResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "66226b9a73c29e33133f0240"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "zzombi200124@gmail.com"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "User"
+                    },
+                    "avatarURL": {
+                        "type": "string",
+                        "example": "//www.gravatar.com/avatar/c8d6f4ba6b5b119ce2a5220640d82b22"
+                    },
+                    "themeId": {
+                        "type": "string",
+                        "example": "6625452c0713afbc276181f7"
+                    }
+                }
+            },
+            "UserUpdateResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "66226b9a73c29e33133f0240"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "zzombi200124@gmail.com"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "User"
+                    },
+                    "avatarURL": {
+                        "type": "string",
+                        "example": "//www.gravatar.com/avatar/c8d6f4ba6b5b119ce2a5220640d82b22"
+                    },
+                    "themeId": {
+                        "type": "string",
+                        "example": "6625452c0713afbc276181f7"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        },
+                        "example": [
+                            {
+                                "403": "Your current password is not valid"
+                            }
+                        ]
                     }
                 }
             }
