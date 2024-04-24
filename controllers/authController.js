@@ -314,6 +314,61 @@ const logout = async (req, res, next) => {
     }
 };
 
+const generateDigits = (digits) => {
+    const max = Math.pow(10, digits) - 1;
+    const min = Math.pow(10, digits - 1);
+    const range = max - min + 1;
+
+    let randomNumber;
+    do {
+        const buf = crypto.randomBytes(6);
+        const hex = buf.toString("hex");
+        randomNumber = parseInt(hex, 16);
+        // Скорочення числа до потрібного діапазону
+        randomNumber = (randomNumber % range) + min;
+    } while (randomNumber > max);
+
+    return randomNumber;
+};
+
+const resendPassword = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        const user = await findByFilter(User, { email });
+        if (!user) {
+            throw HttpError(404, "User not found");
+        }
+
+        const randomNumber = generateDigits(6);
+        user.verificationToken = randomNumber;
+        await user.save();
+
+        await MailService.sendRestoreMail(email, randomNumber);
+
+        res.json({ message: "email sent successfylly" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const verifyResendPassword = async (req, res, next) => {
+    try {
+        const { code, password } = req.body;
+        const user = await findByFilter(User, { verificationToken: code });
+        if (!user) {
+            throw HttpError(404, "No user found");
+        }
+        const hashPassword = await bcrypt.hash(password, 10);
+        user.verificationToken = "";
+        user.password = hashPassword;
+        await user.save();
+
+        res.json({ message: "password changed successfylly" });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     singup,
     verify,
@@ -325,4 +380,6 @@ export default {
     googleRedirect,
     refresh,
     logout,
+    resendPassword,
+    verifyResendPassword,
 };
