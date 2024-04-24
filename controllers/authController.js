@@ -1,9 +1,7 @@
 import bcrypt from "bcrypt";
-import gravatar from "gravatar";
 import { nanoid } from "nanoid";
 import queryString from "query-string";
 import axios from "axios";
-import { response } from "express";
 
 import HttpError from "../helpers/HttpError.js";
 import authServices from "../services/authServices.js";
@@ -24,7 +22,6 @@ const singup = async (req, res, next) => {
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
-        const avatarURL = gravatar.url(email);
 
         const verificationToken = nanoid();
 
@@ -37,7 +34,7 @@ const singup = async (req, res, next) => {
             email,
             password: hashPassword,
             name: name ? name : "User",
-            avatarURL,
+            avatarURL: null,
             verificationToken,
         });
         res.status(201).json({ email });
