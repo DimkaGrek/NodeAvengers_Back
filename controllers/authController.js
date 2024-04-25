@@ -10,7 +10,7 @@ import MailService from "../services/MailService.js";
 import UserDto from "../dto/UserDto.js";
 import TokenService from "../services/TokenService.js";
 import { findByFilter } from "../services/FindOneService.js";
-import crypto from 'crypto'
+import crypto from "crypto";
 
 const singup = async (req, res, next) => {
     try {
@@ -346,7 +346,7 @@ const resendPassword = async (req, res, next) => {
 
         await MailService.sendRestoreMail(email, randomNumber);
 
-        res.json({ message: "email sent successfylly" });
+        res.json({ message: "email sent successfully" });
     } catch (error) {
         next(error);
     }

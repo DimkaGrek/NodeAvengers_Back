@@ -24,7 +24,7 @@ export const createCard = async (req, res, next) => {
         const card = await Card.create(req.body);
         column.cards.push(card._id);
         await column.save();
-        res.json(card);
+        res.status(201).json(card);
     } catch (error) {
         next(error);
     }
@@ -54,7 +54,7 @@ export const updateCard = async (req, res, next) => {
             );
 
             const newColum = await Column.findById(columnId);
-            
+
             newColum.cards.push(id);
             await newColum.save();
         }
