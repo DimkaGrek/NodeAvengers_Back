@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "https://nodeavengers-back.onrender.com/api/"
+            "url": "https://nodeavengers-back.onrender.com:3000/api/"
         }
     ],
     "tags": [
@@ -243,7 +243,12 @@
                     "401": {
                         "description": "No refresh token provided, refreshToken is not valid"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/auth/logout": {
@@ -274,7 +279,12 @@
                     "401": {
                         "description": "No refresh token, No user with this refreshToken"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/auth/resendEmail": {
@@ -325,6 +335,86 @@
                 }
             }
         },
+        "/auth/google": {
+            "get": {
+                "tags": ["Auth"],
+                "summary": "Registration / Login by Google account",
+                "description": "Registration / Login by Google account",
+                "responses": {
+                    "default": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/auth/resendPassword": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Request for resend password",
+                "description": "Request for resend password",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/auth/verifyResendPassword": {
+            "patch": {
+                "tags": ["Auth"],
+                "summary": "Verify restore number",
+                "description": "Verify restore number",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "562645"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "12345"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfylly"
+                    },
+                    "404": {
+                        "description": "No user found"
+                    }
+                }
+            }
+        },
         "/users/{id}": {
             "get": {
                 "summary": "Get current user",
@@ -354,7 +444,12 @@
                     "404": {
                         "description": "No user found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
                 "summary": "Change User data",
@@ -403,8 +498,19 @@
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "No user found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/users/{id}/theme": {
@@ -456,8 +562,16 @@
                     },
                     "400": {
                         "description": "No themeId"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/users/{id}/support": {
@@ -524,10 +638,18 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "404": {
                         "description": "No user found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/themes/": {
@@ -560,8 +682,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
                 "summary": "Create a new theme",
@@ -585,14 +715,15 @@
                 "responses": {
                     "201": {
                         "description": "Created",
-                        "content": null,
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "any"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "any"
+                                        }
                                     }
                                 }
                             }
@@ -600,8 +731,16 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/themes/{id}": {
@@ -636,20 +775,21 @@
                 "responses": {
                     "200": {
                         "description": "Success",
-                        "content": null,
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "_id": {
-                                        "type": "string",
-                                        "example": "6625452c0713afbc276181f7",
-                                        "description": "theme id"
-                                    },
-                                    "name": {
-                                        "type": "string",
-                                        "example": "any",
-                                        "description": "name of theme"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "6625452c0713afbc276181f7",
+                                            "description": "theme id"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "any",
+                                            "description": "name of theme"
+                                        }
                                     }
                                 }
                             }
@@ -657,8 +797,16 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "summary": "Delete theme",
@@ -677,24 +825,26 @@
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/board/": {
             "get": {
-                "description": "",
+                "summary": "Get all boards by user",
+                "description": "Get all boards by user",
                 "tags": ["Board"],
-                "parameters": [
-                    {
-                        "name": "Bearer token",
-                        "in": "header",
-                        "type": "string"
-                    }
-                ],
                 "responses": {
                     "200": {
-                        "description": "Ok",
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -734,33 +884,35 @@
                     "401": {
                         "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
-                "description": "",
+                "summary": "Create new board",
+                "description": "Create new board",
                 "tags": ["Board"],
-                "parameters": [
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "board1"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "example": "board1"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
-                        "description": "Ok",
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -776,6 +928,9 @@
                                         },
                                         "columns": {
                                             "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            },
                                             "example": []
                                         },
                                         "_id": {
@@ -787,32 +942,38 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Board with same name has already created"
+                    },
                     "401": {
                         "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/board/{id}": {
             "get": {
                 "tags": ["Board"],
-                "description": "",
+                "summary": "Get columns and cards from board",
+                "description": "Get columns and cards from board",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Ok",
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -895,38 +1056,47 @@
                     "401": {
                         "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
                 "tags": ["Board"],
-                "description": "",
+                "summary": "Change board",
+                "description": "Change board",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "testName"
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "testName",
+                                        "description": "Name of theme"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -957,23 +1127,29 @@
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Board not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": ["Board"],
-                "description": "",
+                "summary": "Delete theme",
+                "description": "Delete theme",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -982,38 +1158,44 @@
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Board not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/colum/": {
             "post": {
-                "description": "",
+                "summary": "Create colomn",
+                "description": "Create colomn",
                 "tags": ["Colum"],
-                "parameters": [
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "test1"
-                                },
-                                "boardId": {
-                                    "example": "66243605039254c689cd444b"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "example": "test1"
+                                    },
+                                    "boardId": {
+                                        "example": "66243605039254c689cd444b"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1029,6 +1211,9 @@
                                         },
                                         "cards": {
                                             "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            },
                                             "example": []
                                         },
                                         "_id": {
@@ -1040,113 +1225,121 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Colum with same name has already created"
+                    },
                     "401": {
                         "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/colum/{id}": {
             "put": {
                 "tags": ["Colum"],
-                "description": "",
+                "summary": "Update column",
+                "description": "Update column",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "example": "test"
-                                }
-                            }
+                            "type": "string"
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "_id": {
-                                            "type": "string",
-                                            "example": "662530a4058dbb5d245eebe2"
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "test"
-                                        },
-                                        "boardId": {
-                                            "type": "string",
-                                            "example": "66243605039254c689cd444b"
-                                        },
-                                        "cards": {
-                                            "type": "array",
-                                            "example": []
-                                        }
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "example": "test"
                                     }
                                 }
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ColumnResponse"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Colum not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "get": {
-                "description": "",
+                "summary": "Get information from column",
+                "description": "Get information from column",
                 "tags": ["Colum"],
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ColumnResponse"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
-                "description": "",
+                "summary": "Delete column",
+                "description": "Delete column",
                 "tags": ["Colum"],
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -1156,83 +1349,103 @@
                     "401": {
                         "description": "Unauthorized"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/card/{id}": {
             "get": {
                 "tags": ["Card"],
-                "description": "",
+                "summary": "Get information from card",
+                "description": "Get information from card",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CardResponse"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Card not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
-                "description": "",
+                "summary": "Change card",
+                "description": "Change card",
                 "tags": ["Card"],
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "title": {
-                                    "type": "string",
-                                    "example": "3"
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "example": "hello?"
-                                },
-                                "priority": {
-                                    "type": "string",
-                                    "example": "high"
-                                },
-                                "deadline": {
-                                    "type": "string",
-                                    "format": "date-time",
-                                    "example": "2024-04-17T14:00:00.000Z"
-                                },
-                                "columnId": {
-                                    "type": "string",
-                                    "example": "6624331d6df26838b508a9c3"
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "3"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "hello?"
+                                    },
+                                    "priority": {
+                                        "type": "string",
+                                        "example": "high"
+                                    },
+                                    "deadline": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-04-17T14:00:00.000Z"
+                                    },
+                                    "columnId": {
+                                        "type": "string",
+                                        "example": "6624331d6df26838b508a9c3"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
+                        "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1274,23 +1487,29 @@
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Card not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": ["Card"],
-                "description": "",
+                "summary": "Delete card",
+                "description": "Delete card",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -1299,92 +1518,82 @@
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Card not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/card/": {
             "post": {
                 "tags": ["Card"],
-                "description": "",
-                "parameters": [
-                    {
-                        "name": "authorization",
-                        "in": "header",
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "title": {
-                                    "type": "string",
-                                    "example": "test"
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "example": "hello?"
-                                },
-                                "priority": {
-                                    "type": "string",
-                                    "example": "high"
-                                },
-                                "deadline": {
-                                    "type": "string",
-                                    "format": "date-time",
-                                    "example": "2024-04-17T14:00:00.000Z"
-                                },
-                                "columnId": {
-                                    "type": "string",
-                                    "example": "6624331d6df26838b508a9c3"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "title": {
-                                            "type": "string",
-                                            "example": "hide"
-                                        },
-                                        "description": {
-                                            "type": "string",
-                                            "example": "hie?"
-                                        },
-                                        "priority": {
-                                            "type": "string",
-                                            "example": "high"
-                                        },
-                                        "deadline": {
-                                            "type": "string",
-                                            "format": "date-time",
-                                            "example": "2024-04-17T14:00:00.000Z"
-                                        },
-                                        "columnId": {
-                                            "type": "string",
-                                            "example": "6624331d6df26838b508a9c3"
-                                        },
-                                        "_id": {
-                                            "type": "string",
-                                            "example": "66253ed2dcb8b0aab77a4f9f"
-                                        }
+                "summary": "Create new card",
+                "description": "Create new card",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "hello?"
+                                    },
+                                    "priority": {
+                                        "type": "string",
+                                        "example": "high"
+                                    },
+                                    "deadline": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-04-17T14:00:00.000Z"
+                                    },
+                                    "columnId": {
+                                        "type": "string",
+                                        "example": "6624331d6df26838b508a9c3"
                                     }
                                 }
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Card created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CardResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Card with same title has already created"
                     },
                     "401": {
                         "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Card not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
@@ -1530,7 +1739,72 @@
                         ]
                     }
                 }
+            },
+            "ColumnResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "662530a4058dbb5d245eebe2"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test"
+                    },
+                    "boardId": {
+                        "type": "string",
+                        "example": "66243605039254c689cd444b"
+                    },
+                    "cards": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        },
+                        "example": []
+                    }
+                }
+            },
+            "CardResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "662530a4058dbb5d245eebe2"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "card 1"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "to do something"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "example": "high"
+                    },
+                    "deadline": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "columnId": {
+                        "type": "string",
+                        "example": "6628d535f927f57374378dcc"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
-    }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
 }
