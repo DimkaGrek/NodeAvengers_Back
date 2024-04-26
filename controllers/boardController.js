@@ -32,7 +32,8 @@ export const createBoard = async (req, res, next) => {
         const { name } = req.body;
         const { id } = req.user;
         const boardCurrent = await findByFilter(Board, { name });
-        // console.log("boardCurrent: ", boardCurrent.userId.toString());
+        console.log("boardCurrent: ", boardCurrent);
+        console.log("boardCurrent.userId: ", boardCurrent?.userId?.toString());
         console.log("id: ", id);
         if (boardCurrent && boardCurrent?.userId?.toString() === id) {
             console.log("error!!!");
