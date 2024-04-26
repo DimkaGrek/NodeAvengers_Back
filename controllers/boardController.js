@@ -31,12 +31,17 @@ export const createBoard = async (req, res, next) => {
     try {
         const { name } = req.body;
         const { id } = req.user;
-        const findName = await findByFilter(Board, { name });
-        if (findName)
+        const boardCurrent = await findByFilter(Board, { name });
+        // console.log("boardCurrent: ", boardCurrent.userId.toString());
+        console.log("id: ", id);
+        if (boardCurrent && boardCurrent?.userId?.toString() === id) {
+            console.log("error!!!");
             throw HttpError(400, "Board with same name has already created");
+        }
         const board = await Board.create({ ...req.body, userId: id });
         res.json(board);
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };
