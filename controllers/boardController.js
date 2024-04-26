@@ -35,7 +35,10 @@ export const createBoard = async (req, res, next) => {
         console.log("boardCurrent: ", boardCurrent);
         console.log("boardCurrent.userId: ", boardCurrent?.userId?.toString());
         console.log("id: ", id);
-        if (boardCurrent && boardCurrent?.userId?.toString() === id) {
+        if (
+            boardCurrent.name === name &&
+            boardCurrent?.userId?.toString() === id
+        ) {
             console.log("error!!!");
             throw HttpError(400, "Board with same name has already created");
         }
