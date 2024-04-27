@@ -7,8 +7,9 @@ export const cardSchemaJoi = Joi.object({
     description: Joi.string().required().messages({
         "any.required": "description is required",
     }),
-    priority: Joi.string().valid("low", "medium", "high").messages({
-        "any.only": "priority role, choose one of them low, medium, high",
+    priority: Joi.string().valid("low", "medium", "high", "without").messages({
+        "any.only":
+            "priority role, choose one of them low, medium, high, without",
     }),
     deadline: Joi.date().required().messages({
         "any.required": "deadline is required",

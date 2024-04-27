@@ -13,11 +13,11 @@ const CardSchema = new Schema(
         priority: {
             type: String,
             enum: {
-                values: ["low", "medium", "high"],
-                message: `{VALUE} is not supported choose one of this "low", "medium", "hight"`,
+                values: ["low", "medium", "high", "without"],
+                message: `{VALUE} is not supported choose one of this "low", "medium", "hight", "without"`,
             },
             nullable: true,
-            default: null
+            default: null,
         },
         deadline: {
             type: Date,
@@ -26,7 +26,7 @@ const CardSchema = new Schema(
         columnId: {
             type: Schema.Types.ObjectId,
             ref: "Column",
-            required: [true, 'columnId is required']
+            required: [true, "columnId is required"],
         },
     },
     { versionKey: false }
