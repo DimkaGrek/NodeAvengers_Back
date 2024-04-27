@@ -21,7 +21,9 @@ const CardSchema = new Schema(
         },
         deadline: {
             type: Date,
-            required: [true, "Deadline is required"], // '2024-04-17T14:00:00.000Z' (год-месяц-деньTчасы:минуты:секунды.миллисекунды)
+            // required: [true, "Deadline is required"], // '2024-04-17T14:00:00.000Z' (год-месяц-деньTчасы:минуты:секунды.миллисекунды)
+            nullable: true,
+            defuault: null,
         },
         columnId: {
             type: Schema.Types.ObjectId,

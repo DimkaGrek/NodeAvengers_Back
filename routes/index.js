@@ -11,9 +11,9 @@ const mainRouter = Router();
 
 mainRouter.use("/auth", authRouter);
 
-mainRouter.use("/users", userRouter);
+mainRouter.use("/users", authMiddleware, userRouter);
 
-mainRouter.use("/themes", themeRouter);
+mainRouter.use("/themes", authMiddleware, themeRouter);
 
 mainRouter.use("/board", authMiddleware, boardRouter);
 
