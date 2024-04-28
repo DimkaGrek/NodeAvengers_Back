@@ -67,7 +67,7 @@ export const updateBoard = async (req, res, next) => {
             name,
             userId: req.user.id,
         });
-        if (boardCurrent) {
+        if (boardCurrent && boardCurrent._id != id) {
             throw HttpError(400, "Board with same name already exist");
         }
         const board = await Board.findByIdAndUpdate(id, req.body, {
