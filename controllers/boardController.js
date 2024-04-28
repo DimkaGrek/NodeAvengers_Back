@@ -62,12 +62,21 @@ export const deleteBoard = async (req, res, next) => {
 export const updateBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const { name } = req.body;
+        const boardCurrent = await findByFilter(Board, {
+            name,
+            userId: req.user.id,
+        });
+        if (boardCurrent) {
+            throw HttpError(400, "Board with same name already exist");
+        }
         const board = await Board.findByIdAndUpdate(id, req.body, {
             new: true,
         });
         if (!board) throw HttpError(404, "Board not found");
         res.json(board);
     } catch (error) {
+        console.log();
         next(error);
     }
 };
