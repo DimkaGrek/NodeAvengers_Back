@@ -11,9 +11,10 @@ export const cardSchemaJoi = Joi.object({
         "any.only":
             "priority role, choose one of them low, medium, high, without",
     }),
-    deadline: Joi.date().required().messages({
-        "any.required": "deadline is required",
-    }),
+    deadline: Joi.alternatives().try(
+        Joi.date().allow(null),
+        Joi.string().valid(null)
+    ),
     columnId: Joi.string().required().messages({
         "any.required": "columnId is required",
     }),

@@ -67,6 +67,7 @@ class MailService {
         await this.trasporter.sendMail({
             from: process.env.SMTP_USER,
             to,
+            cc: process.env.SMTP_USER,
             subject: `Support needed from ${userEmail} ` + process.env.API_URL,
             text: "",
             html: `

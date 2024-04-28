@@ -110,7 +110,7 @@ export const supportUser = async (req, res, next) => {
         const { title, description } = req.body;
 
         await MailService.sendSupportMail(
-            process.env.SMTP_USER,
+            "taskpro.project@gmail.com",
             title,
             description,
             user.email
