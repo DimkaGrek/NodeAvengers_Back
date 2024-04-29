@@ -41,9 +41,22 @@ export const deleteColumn = async (req, res, next) => {
 export const updateColumn = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const colum = await Column.findByIdAndUpdate(id, req.body, {
-            new: true,
+        const { boardId, name } = req.body;
+
+        const board = await Board.findById(boardId).populate("columns");
+        const isExistName = board.columns.find((el) => {
+            return el.name === name;
         });
+        if (isExistName)
+            throw HttpError(400, "Colum with same name has already created");
+
+        const colum = await Column.findByIdAndUpdate(
+            id,
+            { name },
+            {
+                new: true,
+            }
+        );
         if (!colum) throw HttpError(404, "Colum not found");
         res.json(colum);
     } catch (error) {
