@@ -16,7 +16,7 @@ export const getCard = async (req, res, next) => {
 export const createCard = async (req, res, next) => {
     try {
         const { title, columnId } = req.body;
-        const findName = await findByFilter(Card, { title });
+        const findName = await findByFilter(Card, { title, columnId });
         if (findName)
             throw HttpError(400, "Card with same title has already created");
         const column = await findByFilter(Column, { _id: columnId });
@@ -43,8 +43,11 @@ export const updateCard = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { columnId } = req.body;
-        const card = await Card.findById(id);
+        const card = await findById(id, { title, columnId });
+        const existedCard = await findByFilter(Card, {title:req.body?.title, columnId} )
         if (!card) throw HttpError(404, "Card not found");
+
+        if(existedCard) throw HttpError(404, "Card with same title has already exist");
 
         if (columnId) {
             await Column.updateMany(
