@@ -32,17 +32,12 @@ export const createBoard = async (req, res, next) => {
         const { name } = req.body;
         const { id } = req.user;
         const boardCurrent = await findByFilter(Board, { name, userId: id });
-        console.log("boardCurrent: ", boardCurrent);
-        console.log("boardCurrent.userId: ", boardCurrent?.userId?.toString());
-        console.log("id: ", id);
         if (boardCurrent) {
-            console.log("error!!!");
             throw HttpError(400, "Board with same name has already created");
         }
         const board = await Board.create({ ...req.body, userId: id });
         res.json(board);
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };
@@ -72,11 +67,15 @@ export const updateBoard = async (req, res, next) => {
         }
         const board = await Board.findByIdAndUpdate(id, req.body, {
             new: true,
+        }).populate({
+            path: "columns",
+            populate: {
+                path: "cards",
+            },
         });
         if (!board) throw HttpError(404, "Board not found");
         res.json(board);
     } catch (error) {
-        console.log();
         next(error);
     }
 };
