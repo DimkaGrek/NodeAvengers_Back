@@ -64,3 +64,10 @@ export const authSchemaResendEmailJoi = Joi.object({
         "string.email": "email must be in email format (like jonh@mail.com)",
     }),
 });
+
+export const authSchemaRefreshJoi = Joi.object({
+    refreshToken: Joi.string().required().messages({
+        "any.required": "refreshToken is required",
+        "string.base": "The refreshToken must be a text string.",
+    }),
+});

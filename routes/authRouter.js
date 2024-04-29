@@ -4,6 +4,7 @@ import authController from "../controllers/authController.js";
 import { validateBody } from "../helpers/ValidateBody.js";
 import {
     authSchemaLoginJoi,
+    authSchemaRefreshJoi,
     authSchemaRegisterJoi,
     authSchemaResendEmailJoi,
 } from "../schemas/auth.schema.js";
@@ -26,7 +27,11 @@ authRouter.post(
 authRouter.get("/verify/:verificationToken", authController.verify);
 authRouter.post("/verify", authController.resendEmail);
 authRouter.post("/verifyLogin", authController.verifyLogin);
-authRouter.post("/refresh", authController.refresh);
+authRouter.post(
+    "/refresh",
+    validateBody(authSchemaRefreshJoi),
+    authController.refresh
+);
 authRouter.post("/logout", authController.logout);
 authRouter.post(
     "/resendEmail",

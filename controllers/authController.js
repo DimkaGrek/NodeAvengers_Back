@@ -253,7 +253,7 @@ const refresh = async (req, res, next) => {
         const userData = TokenService.validateRefreshToken(refreshToken);
 
         const user = await findByFilter(User, { refreshToken });
-        if (!userData || !user.refreshToken) {
+        if (!userData || !user) {
             throw HttpError(401, "refreshToken is not valid");
         }
         const userDto = new UserDto(user);
