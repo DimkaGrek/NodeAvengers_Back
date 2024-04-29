@@ -23,7 +23,6 @@ export const createCard = async (req, res, next) => {
             const isExistCard = element.cards.find(
                 (card) => card.title === title
             );
-            console.log(isExistCard);
             if (isExistCard) isExist = true;
         });
         if (isExist)

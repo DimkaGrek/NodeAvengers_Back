@@ -1,9 +1,6 @@
-import { User } from "../models/user.model.js";
 import { Theme } from "../models/theme.model.js";
 
 import HttpError from "../helpers/HttpError.js";
-import { findByFilter } from "../services/FindOneService.js";
-import UserDto from "../dto/UserDto.js";
 
 export const getThemes = async (req, res, next) => {
     try {

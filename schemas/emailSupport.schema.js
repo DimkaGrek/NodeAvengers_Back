@@ -9,8 +9,4 @@ export const emailSupportSchema = Joi.object({
         "any.required": "description is required",
         "string.base": "description must be a string",
     }),
-    // userId: Joi.string().required().messages({
-    //     "any.required": "userId is required",
-    //     "string.pattern.base": "userId must be a valid ObjectId",
-    // }),
 });
