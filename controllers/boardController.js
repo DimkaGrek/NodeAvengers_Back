@@ -2,6 +2,7 @@ import { Board } from "../models/board.model.js";
 import HttpError from "../helpers/HttpError.js";
 import { findByFilter } from "../services/FindOneService.js";
 import { deleteColumnAndCards } from "../services/ColumnService.js";
+import { findBoard } from "../services/BoardService.js";
 
 export const getBoards = async (req, res, next) => {
     try {
@@ -15,12 +16,7 @@ export const getBoards = async (req, res, next) => {
 export const getBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const board = await Board.findById(id).populate({
-            path: "columns",
-            populate: {
-                path: "cards",
-            },
-        });
+        const board = await findBoard(id);
         if (!board) throw HttpError(404, "Board not found");
         res.json(board);
     } catch (error) {
