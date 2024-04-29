@@ -575,7 +575,7 @@
             }
         },
         "/users/{id}/support": {
-            "patch": {
+            "post": {
                 "tags": ["User"],
                 "summary": "Send Email Support",
                 "description": "Send Email Support",
