@@ -18,4 +18,7 @@ export const cardSchemaJoi = Joi.object({
     columnId: Joi.string().required().messages({
         "any.required": "columnId is required",
     }),
+    boardId: Joi.string().required().messages({
+        "any.required": "boardId is required",
+    }),
 });
