@@ -54,20 +54,21 @@ export const updateCard = async (req, res, next) => {
         const { columnId, boardId, title } = req.body;
         const card = await Card.findById(id);
 
-        const board = await findBoard(boardId);
-        let isExist = false;
-        board.columns.forEach((element) => {
-            const isExistCard = element.cards.find(
-                (card) => card.title === title
-            );
-            console.log(isExistCard);
-            if (isExistCard) isExist = true;
-        });
-
-        if (isExist)
-            throw HttpError(404, "Card with same title has already exist");
-
         if (!card) throw HttpError(404, "Card not found");
+
+        if (card.title !== title) {
+            const board = await findBoard(boardId);
+            let isExist = false;
+            board.columns.forEach((element) => {
+                const isExistCard = element.cards.find(
+                    (card) => card.title === title
+                );
+                if (isExistCard) isExist = true;
+            });
+
+            if (isExist)
+                throw HttpError(404, "Card with same title has already exist");
+        }
 
         if (columnId) {
             await Column.updateMany(
