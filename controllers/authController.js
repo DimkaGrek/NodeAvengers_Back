@@ -214,6 +214,9 @@ const googleRedirect = async (req, res, next) => {
             });
             user = newUser;
         } else {
+            if (!user.avatarURL) {
+                user.avatarURL = picture;
+            }
             user.verificationToken = tokenData.data.access_token;
             await user.save();
         }
