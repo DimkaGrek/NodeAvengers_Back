@@ -16,7 +16,8 @@ export const getBoards = async (req, res, next) => {
 export const getBoard = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const board = await findBoard(id);
+        const { id: userId } = req.user;
+        const board = await findBoard(id, userId);
         if (!board) throw HttpError(404, "Board not found");
         res.json(board);
     } catch (error) {

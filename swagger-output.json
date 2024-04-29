@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "https://nodeavengers-back.onrender.com:3000/api/"
+            "url": "https://nodeavengers-back.onrender.com/api/"
         }
     ],
     "tags": [

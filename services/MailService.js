@@ -20,15 +20,33 @@ class MailService {
                 subject: "Activation account on " + process.env.API_URL,
                 text: "",
                 html: `
-                    <div>
-                        <h1>To activate follow the link</h1>
-                        <a href="${link}">${link}</a>
+                    <div style="
+                    border-radius: 8px;
+                    background: #151515;
+                    width: 800px;
+                    font-style: Poppins;
+                    text-align: center;
+                    padding: 20px;
+                    ">
+                        <h1 style="
+                        color: #FFFFFF;
+                        margin: 0 0 16px 0;
+                        ">To activate follow the link</h1>
+                        <a
+                        style="
+                        color: #161616;
+                        padding: 8px;
+                        border-radius: 8px;
+                        background:#BEDBB0;
+                        font-size: 20px;
+                        text-decoration: none;
+                        "
+                        href="${link}">Click on me</a>
                     </div>
                 
                 `,
             });
-        } catch (error) {
-        }
+        } catch (error) {}
     }
 
     async sendRestoreMail(to, restoreNumber) {
