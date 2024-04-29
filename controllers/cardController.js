@@ -17,7 +17,9 @@ export const getCard = async (req, res, next) => {
 export const createCard = async (req, res, next) => {
     try {
         const { title, columnId, boardId } = req.body;
-        const board = await findBoard(boardId);
+
+        const board = await findBoard(boardId, req.user.id);
+
         let isExist = false;
         board.columns.forEach((element) => {
             const isExistCard = element.cards.find(
@@ -56,7 +58,7 @@ export const updateCard = async (req, res, next) => {
         if (!card) throw HttpError(404, "Card not found");
 
         if (card.title !== title) {
-            const board = await findBoard(boardId);
+            const board = await findBoard(boardId, req.user.id);
             let isExist = false;
             board.columns.forEach((element) => {
                 const isExistCard = element.cards.find(

@@ -5,6 +5,9 @@ export const boardSchemaJoi = Joi.object({
         "any.required": "name is required",
         "string.base": "name must be a string",
     }),
+    userId: Joi.string().messages({
+        "string.base": "userId must be a string",
+    }),
     icon: Joi.number().required().messages({
         "any.required": "icon number is required",
         "number.base": "icon must be a number",
