@@ -56,9 +56,28 @@ class MailService {
             subject: "Restore Password on " + process.env.API_URL,
             text: "",
             html: `
-                    <div>
-                        <h1>Restore number for new password:</h1>
-                        ${restoreNumber}
+                    <div style="
+                    border-radius: 8px;
+                    background: #151515;
+                    width: 200px;
+                    font-style: Poppins;
+                    text-align: center;
+                    padding: 20px;
+                    ">
+                        <h1 style="
+                        color: #FFFFFF;
+                        margin: 0 0 16px 0;
+                        ">Your code</h1>
+                        <p
+                        style="
+                        color: #161616;
+                        padding: 8px;
+                        border-radius: 8px;
+                        background:#BEDBB0;
+                        font-size: 20px;
+                        text-decoration: none;
+                        "
+                       >${restoreNumber}</p>
                     </div>
                 `,
         });
